@@ -228,11 +228,15 @@ class MusicBeatState extends FlxUIState
 			return;
 		}
 
-		FlxG.cameras.fade(FlxColor.BLACK, 1, false, function() FlxG.switchState(nextState), true);
+		if(FlxTransitionableState.skipNextTransIn) FlxG.switchState(nextState);
+		else startTransition(nextState);
+		FlxTransitionableState.skipNextTransIn = false;
 	}
 
 	public static function resetState() {
-		FlxG.cameras.fade(FlxColor.BLACK, 1, false, function() FlxG.resetState(), true);
+		if(FlxTransitionableState.skipNextTransIn) FlxG.resetState();
+		else startTransition();
+		FlxTransitionableState.skipNextTransIn = false;
 	}
 
 	// Custom made Trans in
