@@ -52,6 +52,10 @@ class PreloadingState extends MusicBeatState
         WarnTextBack.alpha = 0;
        // WarnTextBack.visible = true;
        // add(WarnTextBack);
+
+	    #if android
+		    addVirtualPad(NONE, A_B);
+	    #end
     }
 
     override function update(elapsed:Float)
