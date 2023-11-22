@@ -308,9 +308,9 @@ class StoryMenuState extends MusicBeatState
 				openSubState(new ResetScoreSubState('', curDifficulty, '', curWeek));
 				//FlxG.sound.play(Paths.sound('scrollMenu'));
 			}
-			else if (controls.ACCEPT)
+			
+			if (controls.ACCEPT)
 			{
-				FlxG.sound.music.fadeOut(0.7, 0);
 				selectWeek();
 			}
 		}
@@ -368,29 +368,11 @@ class StoryMenuState extends MusicBeatState
 				trace('ERROR! $e');
 				return;
 			}
-			
-			if (stopspamming == false)
-			{
+
 				FlxG.sound.play(Paths.sound('confirmMenu'));
 				FlxG.sound.music.fadeOut(2, 0);
-
-				//grpWeekText.members[curWeek].alpha = 0;
-
-				for (char in grpWeekCharacters.members)
-				{
-					if (char.character != '' && char.hasConfirmAnimation)
-					{
-						char.animation.play('confirm');
-					}
-				}
-				stopspamming = true;
-			}
-
-			new FlxTimer().start(1, function(tmr:FlxTimer)
-			{
 				LoadingState.loadAndSwitchState(new PlayState(), true);
 				FreeplayState.destroyFreeplayVocals();
-			});
 			
 			#if MODS_ALLOWED
 				#if desktop
