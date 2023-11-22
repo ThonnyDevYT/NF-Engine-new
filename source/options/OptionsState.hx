@@ -186,10 +186,10 @@ class OptionsState extends MusicBeatState
 
 	override function update(elapsed:Float) {
 
-		if (controls.UI_UP) {
+		if (controls.UI_UP_P) {
 			changeSelection(-1);
 		}
-		if (controls.UI_DOWN) {
+		if (controls.UI_DOWN_P) {
 			changeSelection(1);
 		}
 
