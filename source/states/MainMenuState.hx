@@ -216,11 +216,11 @@ class MainMenuState extends MusicBeatState
 		settingIcon.alpha = 1;
 		//add(settingIcon);
 
-		settingButton = new FlxButton(FlxG.width - 100, FlxG.height - 150, "", onClickSetting);
+		settingButton = new FlxButton(FlxG.width - 100, FlxG.height - 450, "", onClickSetting);
 		settingButton.loadGraphicFromSprite(settingIcon);
 		settingButton.scrollFactor.set();
 
-		videoButton = new FlxButton(FlxG.width - 105, FlxG.height - 250, "", onClickVideo);
+		videoButton = new FlxButton(FlxG.width - 105, FlxG.height - 650, "", onClickVideo);
 		videoButton.loadGraphicFromSprite(videoIcon);
 		videoButton.scrollFactor.set();
 
@@ -337,7 +337,7 @@ class MainMenuState extends MusicBeatState
 			settingButton.alpha = 0.5;
 		}
 
-		if (settingButton.justPressed) {
+		if (settingButton.justTouched) {
 			settingButton.alpha = 1;
 		}
 
@@ -345,8 +345,12 @@ class MainMenuState extends MusicBeatState
 			videoButton.alpha = 0.5;
 		}
 
-		if (videoButton.justPressed) {
+		if (videoButton.justTouched) {
 			videoButton.alpha = 1;
+		}
+
+		if (settingButton.justTouched) {
+			onClickSetting();
 		}
 
 		if (!selectedSomethin)

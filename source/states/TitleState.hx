@@ -172,6 +172,7 @@ class TitleState extends MusicBeatState
 
 		ClientPrefs.loadPrefs();
 
+		/*
 		if (ClientPrefs.data.Welcome == true) {
 			trace('cheking for release video');
 			var htss = new haxe.Http("https://raw.githubusercontent.com/ThonnyDevYT/FNFVersion/main/Link_video.txt");
@@ -188,8 +189,11 @@ class TitleState extends MusicBeatState
 				}
 
 				htss.request();
-		}
+		}*/
 
+		releasevideolink = "https://www.youtube.com/watch?v=M67O8wIE-2U";
+
+		/*
 		if (ClientPrefs.data.Welcome == true) {
 			trace('cheking for editors permiss');
 			var htsp = new haxe.Http("https://raw.githubusercontent.com/ThonnyDevYT/FNFVersion/main/Editor-Permiss.txt");
@@ -216,8 +220,10 @@ class TitleState extends MusicBeatState
 				}
 
 				htsp.request();
-		}
+		}*/
+		editorresult = false;
 
+		/*
 		if(ClientPrefs.data.Welcome == true) {
 			trace('checking for update');
 			var htps = new haxe.Http("https://raw.githubusercontent.com/ThonnyDevYT/FNFVersion/main/GitVersion.txt");
@@ -238,7 +244,8 @@ class TitleState extends MusicBeatState
 			}
 
 			htps.request();
-		}
+		}*/
+		UpdateEC = false;
 
 		Highscore.load();
 
@@ -324,6 +331,7 @@ class TitleState extends MusicBeatState
 		logoBl.scale.x = 0.9;
 		logoBl.scale.y = 0.9;
 
+		#if desktop
 		if (ClientPrefs.data.language == 'Spanish') {
 			titleTxt = new FlxText(0, 650, FlxG.width, "Presiona 'Enter' para Continuar", 48);
 		}
@@ -333,6 +341,18 @@ class TitleState extends MusicBeatState
 		if (ClientPrefs.data.language == 'Portuguese') {
 			titleTxt = new FlxText(0, 650, FlxG.width, "Pressione 'Enter' para Continuar", 48);
 		}
+		#end
+		#if android
+		if (ClientPrefs.data.language == 'Spanish') {
+			titleTxt = new FlxText(0, 650, FlxG.width, "Presiona la Panatalla para Continuar", 48);
+		}
+		if (ClientPrefs.data.language == 'Inglish') {
+			titleTxt = new FlxText(0, 650, FlxG.width, "Press the Screen to Continue", 48);
+		}
+		if (ClientPrefs.data.language == 'Portuguese') {
+			titleTxt = new FlxText(0, 650, FlxG.width, "Pressione a tela para continuar", 48);
+		}
+		#end
 		titleTxt.setFormat(Paths.font("vnd.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		titleTxt.visible = true;
 		titleTxt.screenCenter(X);
