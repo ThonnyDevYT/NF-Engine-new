@@ -62,7 +62,7 @@ class PreloadingState extends MusicBeatState
 			FlxTransitionableState.skipNextTransOut = true;
         }*/
 
-            if (FlxG.keys.justPressed.Y) {
+            if (controls.ACCEPT) {
                 ClientPrefs.data.Welcome = true;
                 trace('Welcome = true');
                   ClientPrefs.saveSettings();
@@ -88,7 +88,7 @@ class PreloadingState extends MusicBeatState
 
         }
         
-            if (FlxG.keys.justPressed.N) {
+            if (controls.BACK) {
             ClientPrefs.data.Welcome = true;
             ClientPrefs.saveSettings();
             ClientPrefs.loadPrefs();
