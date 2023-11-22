@@ -7,7 +7,6 @@ import sys.io.File;
 
 import flixel.util.FlxSave;
 import openfl.utils.Assets;
-//import flixel.input.keyboard.FlxKey;
 
 //
 // Things to trivialize some dumb stuff like splitting strings on older Lua
@@ -99,7 +98,6 @@ class ExtraFunctions
 				case 'down': return PlayState.instance.controls.NOTE_DOWN_P;
 				case 'up': return PlayState.instance.controls.NOTE_UP_P;
 				case 'right': return PlayState.instance.controls.NOTE_RIGHT_P;
-				case 'space': return (PlayState.instance.controls.SPACE_P || FlxG.keys.justPressed.SPACE);//an extra key for convinience
 				default: return PlayState.instance.controls.justPressed(name);
 			}
 			return false;
@@ -111,7 +109,6 @@ class ExtraFunctions
 				case 'down': return PlayState.instance.controls.NOTE_DOWN;
 				case 'up': return PlayState.instance.controls.NOTE_UP;
 				case 'right': return PlayState.instance.controls.NOTE_RIGHT;
-				case 'space': return (PlayState.instance.controls.SPACE || FlxG.keys.pressed.SPACE);//an extra key for convinience
 				default: return PlayState.instance.controls.pressed(name);
 			}
 			return false;
@@ -123,7 +120,6 @@ class ExtraFunctions
 				case 'down': return PlayState.instance.controls.NOTE_DOWN_R;
 				case 'up': return PlayState.instance.controls.NOTE_UP_R;
 				case 'right': return PlayState.instance.controls.NOTE_RIGHT_R;
-				case 'space': return (PlayState.instance.controls.SPACE_R || FlxG.keys.justReleased.SPACE);//an extra key for convinience
 				default: return PlayState.instance.controls.justReleased(name);
 			}
 			return false;
@@ -169,15 +165,6 @@ class ExtraFunctions
 			}
 			FunkinLua.luaTrace('setDataFromSave: Save file not initialized: ' + name, false, false, FlxColor.RED);
 		});
-		Lua_helper.add_callback(lua, "eraseSaveData", function(name:String)
-		{
-			if (PlayState.instance.modchartSaves.exists(name))
-			{
-				PlayState.instance.modchartSaves.get(name).erase();
-				return;
-			}
-			FunkinLua.luaTrace('eraseSaveData: Save file not initialized: ' + name, false, false, FlxColor.RED);
-		});
 
 		// File management
 		Lua_helper.add_callback(lua, "checkFileExists", function(filename:String, ?absolute:Bool = false) {
@@ -205,36 +192,11 @@ class ExtraFunctions
 		{
 			try {
 				#if MODS_ALLOWED
-				
-				var str:String = path;
-                var splitStr:Array<String> = str.split(".");
-                
-                var str2:String = splitStr[0];
-                var splitStr2:Array<String> = str2.split("/");
-                
-                var filesCheck:String = '';
-                var length:Int = splitStr2.length - 1;
-                if (length >= 0){                
-                    for (i in 0...length){
-                    filesCheck = filesCheck + '/' + splitStr2[i];
-                    }
-                }
-                if(!absolute){
-    				if (!FileSystem.exists(SUtil.getPath() + 'mods/' + filesCheck)){
-    			        FileSystem.createDirectory(SUtil.getPath() + 'mods/' + filesCheck);
-    			    }
-			    }
-			    else{
-			        if (!FileSystem.exists(SUtil.getPath() + filesCheck)){
-    			        FileSystem.createDirectory(SUtil.getPath() + filesCheck);
-    			    }
-			    }
-			    
 				if(!absolute)
 					File.saveContent(Paths.mods(path), content);
 				else
 				#end
-					File.saveContent(SUtil.getPath() + path, content);
+					File.saveContent(path, content);
 
 				return true;
 			} catch (e:Dynamic) {
