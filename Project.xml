@@ -17,7 +17,7 @@
 
 	<!--Minimum without FLX_NO_GAMEPAD: 11.8, without FLX_NO_NATIVE_CURSOR: 11.2-->
 	<set name="SWF_VERSION" value="11.8" />
-	<!--set name="debug" value="1" />
+	<!--set name="debug" value="1" /-->
 
 	<!-- ____________________________ Window Settings ___________________________ -->
 
@@ -46,7 +46,7 @@
 	
 	<!-- PSYCH ENGINE CUSTOMIZATION -->
 	<define name="HSCRIPT_ALLOWED" if="desktop"/>
-	<define name="MODS_ALLOWED" if="desktop" />
+	<define name="MODS_ALLOWED" if="desktop || android" />
 	<define name="LUA_ALLOWED" if="desktop"/>
 	<!--define name="ACHIEVEMENTS_ALLOWED" /-->
 	<define name="VIDEOS_ALLOWED" if="web || windows" unless="32bits"/>
