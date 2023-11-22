@@ -32,15 +32,11 @@ class Conductor
 	public static function judgeNote(arr:Array<Rating>, diff:Float=0):Rating // die
 	{
 		var data:Array<Rating> = arr;
-		
-		if (ClientPrefs.data.marvelousRating && diff <= data[4].hitWindow) return data[4]; //is marvelous check
-		
-		var dataFix:Int = ClientPrefs.data.marvelousRating ? 1 : 2;
-		for(i in 0...data.length - dataFix) //skips last window (Shit also and marvelous)
+		for(i in 0...data.length-1) //skips last window (Shit)
 			if (diff <= data[i].hitWindow)
 				return data[i];
 
-		return data[data.length - dataFix];
+		return data[data.length - 1];
 	}
 
 	public static function getCrotchetAtTime(time:Float){
@@ -145,10 +141,9 @@ class Conductor
 
 	public static function set_bpm(newBPM:Float):Float {
 		bpm = newBPM;
-
 		crochet = calculateCrochet(bpm);
 		stepCrochet = crochet / 4;
-		
+
 		return bpm = newBPM;
 	}
 }

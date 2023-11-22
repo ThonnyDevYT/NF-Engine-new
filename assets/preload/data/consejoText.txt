@@ -1,0 +1,10 @@
+presiona 'SPACE' Cuando viene una Bala--1/10
+evita fallar flechas si no quieres morir--2/10
+activa el effecto de 'concentracion' para jugar mejor--3/10
+Configurar todo antes de jugar te puede salvar--4/10
+No intentes acceder a los editores sin permisos--5/10
+Utiliza los overlays para saber tu progreso--6/10
+Evita utilizar graficos altos en pc de bajos recursos--7/10
+si no puedes ver las flechas a tiempo desactiva 'Alpha HUD'--8/10
+si te pasas de 50 fallas moriras por instakill--9/10
+si fallas perderas 5% de 'HP' evita fallar--10/10

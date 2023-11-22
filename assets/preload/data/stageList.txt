@@ -1,9 +1,5 @@
 stage
-spooky
 philly
-limo
-mall
-mallEvil
 school
-schoolEvil
-tank
+philly2
+philly3

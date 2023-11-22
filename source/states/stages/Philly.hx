@@ -1,7 +1,9 @@
 package states.stages;
 
+import flixel.group.FlxGroup;
 import states.stages.objects.*;
 import objects.Character;
+
 
 class Philly extends BaseStage
 {
@@ -14,16 +16,13 @@ class Philly extends BaseStage
 	//For Philly Glow events
 	var blammedLightsBlack:FlxSprite;
 	var phillyGlowGradient:PhillyGlowGradient;
-	var phillyGlowParticles:FlxTypedGroup<PhillyGlowParticle>;
 	var phillyWindowEvent:BGSprite;
 	var curLightEvent:Int = -1;
 
 	override function create()
 	{
-		if(!ClientPrefs.data.lowQuality) {
 			var bg:BGSprite = new BGSprite('philly/sky', -100, 0, 0.1, 0.1);
 			add(bg);
-		}
 
 		var city:BGSprite = new BGSprite('philly/city', -10, 0, 0.3, 0.3);
 		city.setGraphicSize(Std.int(city.width * 0.85));
@@ -37,10 +36,8 @@ class Philly extends BaseStage
 		add(phillyWindow);
 		phillyWindow.alpha = 0;
 
-		if(!ClientPrefs.data.lowQuality) {
-			var streetBehind:BGSprite = new BGSprite('philly/behindTrain', -40, 50);
-			add(streetBehind);
-		}
+		var streetBehind:BGSprite = new BGSprite('philly/behindTrain', -40, 50);
+		add(streetBehind);
 
 		phillyTrain = new PhillyTrain(2000, 360);
 		add(phillyTrain);
@@ -68,32 +65,12 @@ class Philly extends BaseStage
 				phillyGlowGradient.visible = false;
 				insert(members.indexOf(blammedLightsBlack) + 1, phillyGlowGradient);
 				if(!ClientPrefs.data.flashing) phillyGlowGradient.intendedAlpha = 0.7;
-
-				precacheImage('philly/particle'); //precache philly glow particle image
-				phillyGlowParticles = new FlxTypedGroup<PhillyGlowParticle>();
-				phillyGlowParticles.visible = false;
-				insert(members.indexOf(phillyGlowGradient) + 1, phillyGlowParticles);
 		}
 	}
 
 	override function update(elapsed:Float)
 	{
 		phillyWindow.alpha -= (Conductor.crochet / 1000) * FlxG.elapsed * 1.5;
-		if(phillyGlowParticles != null)
-		{
-			var i:Int = phillyGlowParticles.members.length-1;
-			while (i > 0)
-			{
-				var particle = phillyGlowParticles.members[i];
-				if(particle.alpha <= 0)
-				{
-					particle.kill();
-					phillyGlowParticles.remove(particle, true);
-					particle.destroy();
-				}
-				--i;
-			}
-		}
 	}
 
 	override function beatHit()
@@ -131,7 +108,6 @@ class Philly extends BaseStage
 							blammedLightsBlack.visible = false;
 							phillyWindowEvent.visible = false;
 							phillyGlowGradient.visible = false;
-							phillyGlowParticles.visible = false;
 							curLightEvent = -1;
 
 							for (who in chars)
@@ -158,7 +134,6 @@ class Philly extends BaseStage
 							blammedLightsBlack.alpha = 1;
 							phillyWindowEvent.visible = true;
 							phillyGlowGradient.visible = true;
-							phillyGlowParticles.visible = true;
 						}
 						else if(ClientPrefs.data.flashing)
 						{
@@ -175,10 +150,7 @@ class Philly extends BaseStage
 						{
 							who.color = charColor;
 						}
-						phillyGlowParticles.forEachAlive(function(particle:PhillyGlowParticle)
-						{
-							particle.color = color;
-						});
+
 						phillyGlowGradient.color = color;
 						phillyWindowEvent.color = color;
 
@@ -196,7 +168,6 @@ class Philly extends BaseStage
 								for (i in 0...particlesNum)
 								{
 									var particle:PhillyGlowParticle = new PhillyGlowParticle(-400 + width * i + FlxG.random.float(-width / 5, width / 5), phillyGlowGradient.originalY + 200 + (FlxG.random.float(0, 125) + j * 40), color);
-									phillyGlowParticles.add(particle);
 								}
 							}
 						}

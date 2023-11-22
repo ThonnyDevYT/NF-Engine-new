@@ -1,7 +1,6 @@
 package states.stages;
 
 import states.stages.objects.*;
-import backend.Achievements;
 
 enum HenchmenKillState
 {
@@ -27,10 +26,34 @@ class Limo extends BaseStage
 	var bgLimo:BGSprite;
 	var grpLimoParticles:FlxTypedGroup<BGSprite>;
 	var dancersDiff:Float = 320;
+	var changespeed:FlxTimer;
+
+	var skyBG:BGSprite;
+	var limo:BGSprite;
+	var skyBG2:BGSprite;
+	var limo2:BGSprite;
+	var bgLimo2:BGSprite;
+
+	public function onMovimentspeed(Timer:FlxTimer)
+		{
+			FlxTween.tween(bgLimo, {x: bgLimo.x - 120}, 3, {
+				onComplete: function (twn:FlxTween) {
+					FlxTween.tween(bgLimo, {x: bgLimo.x + 120}, 3, {
+						onComplete: function (twn:FlxTween) {
+							FlxTween.tween(bgLimo, {x: bgLimo.x + 120}, 3, {
+								onComplete: function (twn:FlxTween) {
+									FlxTween.tween(bgLimo, {x: bgLimo.x - 120}, 3);
+								}
+							});
+						}
+					});
+				}
+			});
+		}
 
 	override function create()
 	{
-		var skyBG:BGSprite = new BGSprite('limo/limoSunset', -120, -50, 0.1, 0.1);
+		skyBG = new BGSprite('limo/limoSunset', -120, -50, 0.1, 0.1);
 		add(skyBG);
 
 		if(!ClientPrefs.data.lowQuality) {
@@ -40,11 +63,11 @@ class Limo extends BaseStage
 			bgLimo = new BGSprite('limo/bgLimo', -150, 480, 0.4, 0.4, ['background limo pink'], true);
 			add(bgLimo);
 
-			limoCorpse = new BGSprite('gore/noooooo', -500, limoMetalPole.y - 130, 0.4, 0.4, ['Henchmen on rail'], true);
+			/*limoCorpse = new BGSprite('gore/noooooo', -500, limoMetalPole.y - 130, 0.4, 0.4, ['Henchmen on rail'], true);
 			add(limoCorpse);
 
 			limoCorpseTwo = new BGSprite('gore/noooooo', -500, limoMetalPole.y, 0.4, 0.4, ['henchmen death'], true);
-			add(limoCorpseTwo);
+			add(limoCorpseTwo);*/
 
 			grpLimoDancers = new FlxTypedGroup<BackgroundDancer>();
 			add(grpLimoDancers);
@@ -62,30 +85,48 @@ class Limo extends BaseStage
 			grpLimoParticles = new FlxTypedGroup<BGSprite>();
 			add(grpLimoParticles);
 
+			skyBG2 = new BGSprite('limo/limoSunset-2', -120, -50, 0.1, 0.1);
+			//skyBG2.visible = false;
+			skyBG2.alpha = 0;
+			add(skyBG2);
+
+			bgLimo2 = new BGSprite('limo/bgLimo-2', -120, 480, 0.4, 0.4, ['background limo pink'], true);
+			//bgLimo2.visible = false;
+			bgLimo2.alpha = 0;
+			add(bgLimo2);
+
 			//PRECACHE BLOOD
-			var particle:BGSprite = new BGSprite('gore/stupidBlood', -400, -400, 0.4, 0.4, ['blood'], false);
+			/*var particle:BGSprite = new BGSprite('gore/stupidBlood', -400, -400, 0.4, 0.4, ['blood'], false);
 			particle.alpha = 0.01;
 			grpLimoParticles.add(particle);
-			resetLimoKill();
+			resetLimoKill();*/
 
 			//PRECACHE SOUND
-			precacheSound('dancerdeath');
-			setDefaultGF('gf-car');
+			//precacheSound('dancerdeath');
+			//setDefaultGF('gf-car');
 		}
 
-		fastCar = new BGSprite('limo/fastCarLol', -300, 160);
-		fastCar.active = true;
+		//fastCar = new BGSprite('limo/fastCarLol', -300, 160);
+		//fastCar.active = true;
+
+		changespeed = new FlxTimer();
+		changespeed.start(12, onMovimentspeed, 0);
 	}
 	override function createPost()
 	{
-		resetFastCar();
-		addBehindGF(fastCar);
+		//resetFastCar();
+		//addBehindGF(fastCar);
 		
-		var limo:BGSprite = new BGSprite('limo/limoDrive', -120, 550, 1, 1, ['Limo stage'], true);
+		limo = new BGSprite('limo/limoDrive', -120, 550, 1, 1, ['Limo stage'], true);
 		addBehindGF(limo); //Shitty layering but whatev it works LOL
+		limo2 = new BGSprite('limo/limoDrive-2', -120, 550, 1, 1, ['Limo stage'], true);
+		//limo2.visible = false;
+		limo2.alpha = 0;
+		addBehindGF(limo2);
 	}
 
 	var limoSpeed:Float = 0;
+
 	override function update(elapsed:Float)
 	{
 		if(!ClientPrefs.data.lowQuality) {
@@ -109,10 +150,10 @@ class Limo extends BaseStage
 						if(dancers[i].x < FlxG.width * 1.5 && limoLight.x > (370 * i) + 170) {
 							switch(i) {
 								case 0 | 3:
-									if(i == 0) FlxG.sound.play(Paths.sound('dancerdeath'), 0.5);
+									//if(i == 0) FlxG.sound.play(Paths.sound('dancerdeath'), 0.5);
 
 									var diffStr:String = i == 3 ? ' 2 ' : ' ';
-									var particle:BGSprite = new BGSprite('gore/noooooo', dancers[i].x + 200, dancers[i].y, 0.4, 0.4, ['hench leg spin' + diffStr + 'PINK'], false);
+									/*var particle:BGSprite = new BGSprite('gore/noooooo', dancers[i].x + 200, dancers[i].y, 0.4, 0.4, ['hench leg spin' + diffStr + 'PINK'], false);
 									grpLimoParticles.add(particle);
 									var particle:BGSprite = new BGSprite('gore/noooooo', dancers[i].x + 160, dancers[i].y + 200, 0.4, 0.4, ['hench arm spin' + diffStr + 'PINK'], false);
 									grpLimoParticles.add(particle);
@@ -122,7 +163,7 @@ class Limo extends BaseStage
 									var particle:BGSprite = new BGSprite('gore/stupidBlood', dancers[i].x - 110, dancers[i].y + 20, 0.4, 0.4, ['blood'], false);
 									particle.flipX = true;
 									particle.angle = -57.5;
-									grpLimoParticles.add(particle);
+									grpLimoParticles.add(particle);*/
 								case 1:
 									limoCorpse.visible = true;
 								case 2:
@@ -179,8 +220,8 @@ class Limo extends BaseStage
 			});
 		}
 
-		if (FlxG.random.bool(10) && fastCarCanDrive)
-			fastCarDrive();
+		//if (FlxG.random.bool(10) && fastCarCanDrive)
+		//	fastCarDrive();
 	}
 	
 	// Substates for pausing/resuming tweens and timers
@@ -200,14 +241,14 @@ class Limo extends BaseStage
 		}
 	}
 
-	override function eventCalled(eventName:String, value1:String, value2:String, flValue1:Null<Float>, flValue2:Null<Float>, strumTime:Float)
+	/*override function eventCalled(eventName:String, value1:String, value2:String, flValue1:Null<Float>, flValue2:Null<Float>, strumTime:Float)
 	{
 		switch(eventName)
 		{
 			case "Kill Henchmen":
 				killHenchmen();
 		}
-	}
+	}*/
 
 	function dancersParenting()
 	{
@@ -229,25 +270,25 @@ class Limo extends BaseStage
 		limoCorpseTwo.visible = false;
 	}
 
-	function resetFastCar():Void
+	/*function resetFastCar():Void
 	{
 		fastCar.x = -12600;
 		fastCar.y = FlxG.random.int(140, 250);
 		fastCar.velocity.x = 0;
 		fastCarCanDrive = true;
-	}
+	}*/
 
 	var carTimer:FlxTimer;
 	function fastCarDrive()
 	{
 		//trace('Car drive');
-		FlxG.sound.play(Paths.soundRandom('carPass', 0, 1), 0.7);
+		////FlxG.sound.play(Paths.soundRandom('carPass', 0, 1), 0.7);
 
 		fastCar.velocity.x = (FlxG.random.int(170, 220) / FlxG.elapsed) * 3;
 		fastCarCanDrive = false;
 		carTimer = new FlxTimer().start(2, function(tmr:FlxTimer)
 		{
-			resetFastCar();
+			//resetFastCar();
 			carTimer = null;
 		});
 	}
@@ -264,15 +305,8 @@ class Limo extends BaseStage
 				limoKillingState = KILLING;
 
 				#if ACHIEVEMENTS_ALLOWED
-				Achievements.henchmenDeath++;
-				FlxG.save.data.henchmenDeath = Achievements.henchmenDeath;
-				var achieve:String = game.checkForAchievement(['roadkill_enthusiast']);
-				if (achieve != null) {
-					game.startAchievement(achieve);
-				} else {
-					FlxG.save.flush();
-				}
-				FlxG.log.add('Deaths: ' + Achievements.henchmenDeath);
+				var kills = Achievements.addScore("roadkill_enthusiast");
+				FlxG.log.add('Henchmen kills: $kills');
 				#end
 			}
 		}

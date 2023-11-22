@@ -132,7 +132,7 @@ class FunkinLua {
 		set('rating', 0);
 		set('ratingName', '');
 		set('ratingFC', '');
-		set('version', MainMenuState.psychEngineVersion.trim());
+		set('version', MainMenuState.endingcorruptionVersion.trim());
 
 		set('inGameOver', false);
 		set('mustHitSection', false);
@@ -144,7 +144,7 @@ class FunkinLua {
 		set('healthLossMult', game.healthLoss);
 		set('playbackRate', game.playbackRate);
 		set('instakillOnMiss', game.instakillOnMiss);
-		set('botPlay', ClientPrefs.data.playOpponent ? game.cpuControlled_opponent : game.cpuControlled);
+		set('botPlay', ClientPrefs.data.playOpponent ? game.cpuControlled);
 		set('practice', game.practiceMode);
 
 		for (i in 0...4) {

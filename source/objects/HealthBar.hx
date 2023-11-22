@@ -3,6 +3,9 @@ package objects;
 import flixel.math.FlxPoint;
 import flixel.math.FlxRect;
 
+import flixel.tweens.misc.ColorTween;
+import flixel.tweens.FlxTween;
+
 class HealthBar extends FlxSpriteGroup
 {
 	public var leftBar:FlxSprite;
@@ -19,15 +22,16 @@ class HealthBar extends FlxSpriteGroup
 	public var barHeight(default, set):Int = 1;
 	public var barOffset:FlxPoint = new FlxPoint(3, 3);
 
-	public function new(x:Float, y:Float, image:String = 'healthBar', valueFunction:Void->Float = null, boundX:Float = 0, boundY:Float = 1)
+	public function new(x:Float, y:Float, image:String = 'healthBar', valueFunction:Void->Float = null, boundX:Float = 0, boundY:Float = 1, ?angle:Float)
 	{
 		super(x, y);
 		
 		if(valueFunction != null) this.valueFunction = valueFunction;
 		setBounds(boundX, boundY);
 		
-		bg = new FlxSprite().loadGraphic(Paths.image(image));
+		bg = new FlxSprite(x, y).loadGraphic(Paths.image(image));
 		bg.antialiasing = ClientPrefs.data.antialiasing;
+		//bg.screenCenter(Y);
 		barWidth = Std.int(bg.width - 6);
 		barHeight = Std.int(bg.height - 6);
 
@@ -38,6 +42,10 @@ class HealthBar extends FlxSpriteGroup
 		rightBar = new FlxSprite().makeGraphic(Std.int(bg.width), Std.int(bg.height), FlxColor.WHITE);
 		rightBar.color = FlxColor.BLACK;
 		rightBar.antialiasing = ClientPrefs.data.antialiasing;
+
+		bg.angle = angle;
+		leftBar.angle = angle;
+		rightBar.angle = angle;
 
 		add(leftBar);
 		add(rightBar);

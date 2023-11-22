@@ -31,13 +31,13 @@ class Rating
 		var ratingsData:Array<Rating> = [new Rating('sick')]; //highest rating goes first
 
 		var rating:Rating = new Rating('good');
-		rating.ratingMod = 0.75;
+		rating.ratingMod = 0.67;
 		rating.score = 200;
 		rating.noteSplash = false;
 		ratingsData.push(rating);
 
 		var rating:Rating = new Rating('bad');
-		rating.ratingMod = 0.5;
+		rating.ratingMod = 0.34;
 		rating.score = 100;
 		rating.noteSplash = false;
 		ratingsData.push(rating);
@@ -47,15 +47,6 @@ class Rating
 		rating.score = 50;
 		rating.noteSplash = false;
 		ratingsData.push(rating);
-		
-		if (ClientPrefs.data.marvelousRating){
-    		var rating:Rating = new Rating('marvelous');
-    		rating.ratingMod = 1;
-    		rating.score = 350;
-    		rating.image = ClientPrefs.data.marvelousSprite ? 'marvelous' : 'sick';
-    		rating.noteSplash = true;
-		    ratingsData.push(rating);
-		}
 		return ratingsData;
 	}
 }

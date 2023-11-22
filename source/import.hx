@@ -52,5 +52,7 @@ import flixel.tweens.FlxTween;
 import flixel.group.FlxSpriteGroup;
 import flixel.group.FlxGroup.FlxTypedGroup;
 
+import backend.Discord;
+
 using StringTools;
 #end
