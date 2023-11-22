@@ -337,7 +337,7 @@ class MainMenuState extends MusicBeatState
 			settingButton.alpha = 0.5;
 		}
 
-		if (settingButton.justTouched) {
+		if (settingButton.justPressed) {
 			settingButton.alpha = 1;
 		}
 
@@ -345,12 +345,8 @@ class MainMenuState extends MusicBeatState
 			videoButton.alpha = 0.5;
 		}
 
-		if (videoButton.justTouched) {
+		if (videoButton.justPressed) {
 			videoButton.alpha = 1;
-		}
-
-		if (settingButton.justTouched) {
-			onClickSetting();
 		}
 
 		if (!selectedSomethin)
