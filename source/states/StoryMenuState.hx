@@ -1,7 +1,9 @@
 package states;
 
 //import flixel.addons.editors.spine.FlxSpine;
+#if desktop
 import backend.Discord;
+#end
 import flixel.ui.FlxButton;
 import backend.WeekData;
 import backend.Highscore;
@@ -391,7 +393,9 @@ class StoryMenuState extends MusicBeatState
 			});
 			
 			#if MODS_ALLOWED
-			DiscordClient.loadModRPC();
+				#if desktop
+					DiscordClient.loadModRPC();
+				#end
 			#end
 		} else {
 			FlxG.sound.play(Paths.sound('cancelMenu'));
