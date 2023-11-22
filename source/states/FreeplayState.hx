@@ -306,22 +306,10 @@ class FreeplayState extends MusicBeatState
 		positionHighscore();
 
 		var shiftMult:Int = 1;
-		if(FlxG.keys.pressed.SHIFT) shiftMult = 3;
+		//if(FlxG.keys.pressed.SHIFT) shiftMult = 3;
 
 		if(songs.length > 1)
 		{
-			if(FlxG.keys.justPressed.HOME)
-			{
-				curSelected = 0;
-				changeSelection();
-				holdTime = 0;	
-			}
-			else if(FlxG.keys.justPressed.END)
-			{
-				curSelected = songs.length - 1;
-				changeSelection();
-				holdTime = 0;	
-			}
 			if (controls.UI_UP_P)
 			{
 				changeSelection(-shiftMult);
@@ -372,34 +360,8 @@ class FreeplayState extends MusicBeatState
 			FlxG.sound.music.fadeOut(2, 0);
 			MusicBeatState.switchState(new MainMenuState());
 		}
-		else if(FlxG.keys.justPressed.SPACE)
-		{
-			if(instPlaying != curSelected)
-			{
-				#if PRELOAD_ALL
-				destroyFreeplayVocals();
-				//FlxG.sound.playMusic(Paths.music('StateHorror2'), 0); //Error de confucion de Sonidos
-				FlxG.sound.music.fadeOut(2, 0);
-				Mods.currentModDirectory = songs[curSelected].folder;
-				var poop:String = Highscore.formatSong(songs[curSelected].songName.toLowerCase(), curDifficulty);
-				PlayState.SONG = Song.loadFromJson(poop, songs[curSelected].songName.toLowerCase());
-				if (PlayState.SONG.needsVoices)
-					vocals = new FlxSound().loadEmbedded(Paths.voices(PlayState.SONG.song));
-				else
-					vocals = new FlxSound();
-
-				FlxG.sound.list.add(vocals);
-				FlxG.sound.playMusic(Paths.inst(PlayState.SONG.song), 0.7);
-				vocals.play();
-				vocals.persist = true;
-				vocals.looped = true;
-				vocals.volume = 0.7;
-				instPlaying = curSelected;
-				#end
-			}
-		}
-
-		else if (controls.ACCEPT)
+		
+		if (controls.ACCEPT)
 		{
 			persistentUpdate = false;
 			FlxG.sound.music.fadeOut(2, 0);
