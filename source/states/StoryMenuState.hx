@@ -368,11 +368,6 @@ class StoryMenuState extends MusicBeatState
 				trace('ERROR! $e');
 				return;
 			}
-
-				FlxG.sound.play(Paths.sound('confirmMenu'));
-				FlxG.sound.music.fadeOut(2, 0);
-				LoadingState.loadAndSwitchState(new PlayState(), true);
-				FreeplayState.destroyFreeplayVocals();
 			
 			#if MODS_ALLOWED
 				#if desktop
@@ -382,6 +377,11 @@ class StoryMenuState extends MusicBeatState
 		} else {
 			FlxG.sound.play(Paths.sound('cancelMenu'));
 		}
+
+		FlxG.sound.play(Paths.sound('confirmMenu'));
+		FlxG.sound.music.fadeOut(2, 0);
+		LoadingState.loadAndSwitchState(new PlayState(), true);
+		FreeplayState.destroyFreeplayVocals();
 	}
 
 	var tweenDifficulty:FlxTween;

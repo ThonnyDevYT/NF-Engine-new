@@ -138,11 +138,11 @@ class BaseOptionsMenu extends MusicBeatSubstate
 	var holdValue:Float = 0;
 	override function update(elapsed:Float)
 	{
-		if (controls.UI_UP_P)
+		if (controls.UI_UP)
 		{
 			changeSelection(-1);
 		}
-		if (controls.UI_DOWN_P)
+		if (controls.UI_DOWN)
 		{
 			changeSelection(1);
 		}
@@ -157,7 +157,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 			//ClientPrefs.loadPrefs();
 		}
 
-		#if DEMO_MODE
+		#if desktop
 		if (FlxG.keys.justPressed.B) {
 			close();
 			FlxG.sound.play(Paths.sound('confirmMenu'));

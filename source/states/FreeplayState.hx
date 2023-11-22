@@ -230,6 +230,11 @@ class FreeplayState extends MusicBeatState
 		updateTexts();
 		add(black);
 		FlxTween.tween(black, {alpha: 0}, 1);
+		
+		#if android
+		addVirtualPad(FULL, A_B);
+		#end
+
 		super.create();
 	}
 
@@ -310,12 +315,12 @@ class FreeplayState extends MusicBeatState
 
 		if(songs.length > 1)
 		{
-			if (controls.UI_UP_P)
+			if (controls.UI_UP)
 			{
 				changeSelection(-shiftMult);
 				holdTime = 0;
 			}
-			if (controls.UI_DOWN_P)
+			if (controls.UI_DOWN)
 			{
 				changeSelection(shiftMult);
 				holdTime = 0;
