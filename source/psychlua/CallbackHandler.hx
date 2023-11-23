@@ -49,12 +49,6 @@ class CallbackHandler
 				return 1;
 			}
 		}
-		catch(e:Dynamic)
-		{
-			if(Lua_helper.sendErrorsToLua) {LuaL.error(l, 'CALLBACK ERROR! ${if(e.message != null) e.message else e}');return 0;}
-			trace(e);
-			throw(e);
-		}
 		return 0;
 	}
 }
