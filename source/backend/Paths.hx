@@ -479,7 +479,7 @@ class Paths
 	
 	#if MODS_ALLOWED
 	inline static public function mods(key:String = '')
-		return SUtil.getPath() + 'assets/' + key;
+		return SUtil.getPath() + 'mods/' + key;
 	
 	inline static public function modsFont(key:String)
 		return modFolders('fonts/' + key);
@@ -517,7 +517,7 @@ class Paths
 				return fileToCheck;
 
 		}
-		    var fileToCheck:String = SUtil.getPath() + 'assets/' + key;
+		    var fileToCheck:String = SUtil.getPath() + 'mods/' + key;
 			if(FileSystem.exists(fileToCheck)) 
 			return fileToCheck;
 			
