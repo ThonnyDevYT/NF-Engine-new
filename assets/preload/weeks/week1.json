@@ -1,9 +1,9 @@
 {
 	"songs": [
-		["Return", "pico", [146, 113, 253]],
-		["Confusions", "pico", [146, 113, 253]],
-		["Loose Shot", "pico", [146, 113, 253]],
-		["Desperate Ending", "pico", [146, 113, 253]]
+		["return", "pico", [146, 113, 253]],
+		["confusions", "pico", [146, 113, 253]],
+		["loose shot", "pico", [146, 113, 253]],
+		["desperate ending", "pico", [146, 113, 253]]
 	],
 
 	"weekCharacters": [

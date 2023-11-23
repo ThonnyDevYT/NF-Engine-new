@@ -279,10 +279,6 @@ class MainMenuState extends MusicBeatState
 		add(settingButton);
 		add(videoButton);
 
-		if (outdate != true) {
-		add(bg);
-		}
-
 		FlxTween.tween(versionEngine, {alpha: 1}, 0.5);
 		FlxTween.tween(versionEngine, {x: 12}, 0.6, {
 			onComplete: function (twn:FlxTween) {

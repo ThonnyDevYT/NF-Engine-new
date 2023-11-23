@@ -126,13 +126,13 @@ class StoryMenuState extends MusicBeatState
 		}
 
 		WeekData.setDirectoryFromWeek(loadedWeeks[0]);
-		var charArray:Array<String> = loadedWeeks[0].weekCharacters;
+		/*var charArray:Array<String> = loadedWeeks[0].weekCharacters;
 		for (char in 0...3)
 		{
 			var weekCharacterThing:MenuCharacter = new MenuCharacter((FlxG.width * 0.25) * (1 + char) - 150, charArray[char]);
 			weekCharacterThing.y += 70;
 			grpWeekCharacters.add(weekCharacterThing);
-		}
+		}*/
 
 		difficultySelectors = new FlxGroup();
 		add(difficultySelectors);
@@ -168,15 +168,15 @@ class StoryMenuState extends MusicBeatState
 		add(bgSprite);
 		//add(grpWeekCharacters);
 
-		var tracksSprite:FlxSprite = new FlxSprite(FlxG.width * 0.07, bgSprite.y + 425).loadGraphic(Paths.image('Menu_Tracks'));
-		tracksSprite.antialiasing = ClientPrefs.data.antialiasing;
-		add(tracksSprite);
+		//var tracksSprite:FlxSprite = new FlxSprite(FlxG.width * 0.07, bgSprite.y + 425).loadGraphic(Paths.image('Menu_Tracks'));
+		//tracksSprite.antialiasing = ClientPrefs.data.antialiasing;
+		//add(tracksSprite);
 
-		txtTracklist = new FlxText(FlxG.width * 0.05, tracksSprite.y + 60, 0, "", 25);
-		txtTracklist.alignment = LEFT;
-		txtTracklist.font = rankText.font;
-		txtTracklist.color = 0xFFe55777;
-		add(txtTracklist);
+		//txtTracklist = new FlxText(FlxG.width * 0.05, tracksSprite.y + 60, 0, "", 25);
+		//txtTracklist.alignment = LEFT;
+		//txtTracklist.font = rankText.font;
+		//txtTracklist.color = 0xFFe55777;
+		//add(txtTracklist);
 		// add(rankText);
 		add(scoreText);
 		add(txtWeekTitle);
@@ -328,13 +328,13 @@ class StoryMenuState extends MusicBeatState
 
 				grpWeekText.members[curWeek].startFlashing();
 
-				for (char in grpWeekCharacters.members)
+				/*for (char in grpWeekCharacters.members)
 				{
 					if (char.character != '' && char.hasConfirmAnimation)
 					{
 						char.animation.play('confirm');
 					}
-				}
+				}*/
 				stopspamming = true;
 			}
 			new FlxTimer().start(1, function(tmr:FlxTimer)
@@ -453,10 +453,10 @@ class StoryMenuState extends MusicBeatState
 
 	function updateText()
 	{
-		var weekArray:Array<String> = loadedWeeks[curWeek].weekCharacters;
-		for (i in 0...grpWeekCharacters.length) {
+		//var weekArray:Array<String> = loadedWeeks[curWeek].weekCharacters;
+		/*for (i in 0...grpWeekCharacters.length) {
 			grpWeekCharacters.members[i].changeCharacter(weekArray[i]);
-		}
+		}*/
 
 		var leWeek:WeekData = loadedWeeks[curWeek];
 		var stringThing:Array<String> = [];
