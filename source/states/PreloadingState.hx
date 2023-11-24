@@ -28,7 +28,7 @@ class PreloadingState extends MusicBeatState
         FlxTween.tween(bg, {alpha: 1}, 1);
 
         WarnText2 = new FlxText(0, 0, FlxG.width,
-            "Welcome to Ending Corruption\n\nBefore we start we need you to configure some things.\n\nPress 'A' to set or 'B' to Skip",32);
+            "Welcome to Ending Corruption Android\n\nBefore we start we need you to configure some things.\n\nPress 'A' to set or 'B' to Skip",32);
         WarnText2.setFormat("VCR OSD Mono", 32, FlxColor.WHITE, CENTER);
         WarnText2.screenCenter();
        // WarnText2.visible = true;
@@ -48,15 +48,23 @@ class PreloadingState extends MusicBeatState
 	    #end
     }
 
+    override function closeSubState() {
+		super.closeSubState();
+		#if android
+        addVirtualPad(NONE, B);
+        #end
+		ClientPrefs.saveSettings();
+	}
+
     override function update(elapsed:Float)
     {
-            if (MusicBeatState._virtualpad.buttonA == true) {
+            if (controls.ACCEPT) {
                 ClientPrefs.data.Welcome = true;
                   ClientPrefs.saveSettings();
                   ClientPrefs.loadPrefs();
                   Press = true;
                   FlxG.sound.play(Paths.sound('confirmMenu'));
-                  tween.cancel();
+                  #if android removeVirtualPad(); #end
                         FlxTween.tween(WarnText2, {alpha: 0}, 4, {
                             onComplete: function (twn:FlxTween) {
                                 openSubState(new options.InitialSettings());
@@ -65,12 +73,11 @@ class PreloadingState extends MusicBeatState
                         }});
                     }
         
-            if (MusicBeatState._virtualpad.buttonB == true) {
+            if (controls.BACK) {
             ClientPrefs.data.Welcome = true;
             ClientPrefs.saveSettings();
             ClientPrefs.loadPrefs();
             FlxG.sound.play(Paths.sound('cancelMenu'));
-            tween.cancel();
             FlxG.camera.fade(FlxColor.BLACK, 1, false);
 
             FlxTween.tween(bg, {alpha: 0}, 1.2, {
