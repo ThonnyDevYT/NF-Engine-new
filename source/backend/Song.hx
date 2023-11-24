@@ -1,14 +1,15 @@
 package backend;
 
 import tjson.TJSON as Json;
-import lime.utils.Assets;
 
-#if sys
+#if MODS_ALLOWED
 import sys.io.File;
 import sys.FileSystem;
 #end
 
 import backend.Section;
+
+import lime.utils.Assets;
 
 typedef SwagSong =
 {
@@ -18,7 +19,6 @@ typedef SwagSong =
 	var bpm:Float;
 	var needsVoices:Bool;
 	var speed:Float;
-
 	var player1:String;
 	var player2:String;
 	var gfVersion:String;
@@ -28,7 +28,7 @@ typedef SwagSong =
 	@:optional var gameOverSound:String;
 	@:optional var gameOverLoop:String;
 	@:optional var gameOverEnd:String;
-	
+
 	@:optional var disableNoteRGB:Bool;
 
 	@:optional var arrowSkin:String;
@@ -51,6 +51,7 @@ class Song
 	public var disableNoteRGB:Bool = false;
 	public var speed:Float = 1;
 	public var stage:String;
+
 	public var player1:String = 'bf';
 	public var player2:String = 'dad';
 	public var gfVersion:String = 'gf';
@@ -97,7 +98,7 @@ class Song
 
 	public static function loadFromJson(jsonInput:String, ?folder:String):SwagSong
 	{
-		var rawJson = null;
+		var rawJson:String = null;
 		
 		var formattedFolder:String = Paths.formatToSongPath(folder);
 		var formattedSong:String = Paths.formatToSongPath(jsonInput);
@@ -109,8 +110,8 @@ class Song
 		#end
 
 		if(rawJson == null) {
-			#if sys
-			rawJson = File.getContent(Paths.json(formattedFolder + '/' + formattedSong)).trim();
+			#if MODS_ALLOWED
+			rawJson = File.getContent(SUtil.getPath() + Paths.json(formattedFolder + '/' + formattedSong)).trim();
 			#else
 			rawJson = Assets.getText(Paths.json(formattedFolder + '/' + formattedSong)).trim();
 			#end
@@ -138,14 +139,12 @@ class Song
 				daSong = songData.song;
 				daBpm = songData.bpm; */
 
-		var songJson:Dynamic = parseJSONshit(rawJson);
+		var songJson:Dynamic = parseJson(rawJson);
 		if(jsonInput != 'events') StageData.loadDirectory(songJson);
 		onLoadJson(songJson);
 		return songJson;
 	}
 
-	public static function parseJSONshit(rawJson:String):SwagSong
-	{
+	public static function parseJson(rawJson:String):SwagSong
 		return cast Json.parse(rawJson).song;
-	}
 }
