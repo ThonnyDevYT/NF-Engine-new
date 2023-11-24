@@ -247,6 +247,11 @@ class Paths
 		var file:Sound = returnSound('music', key, library);
 		return file;
 	}
+	inline static public function music2(key:String, ?library:String):Sound
+		{
+			var file:Sound = returnSound('music', key, library);
+			return file;
+		}
 
 	inline static public function voices(song:String):Any
 	{
