@@ -1275,7 +1275,7 @@ class PlayState extends MusicBeatState
 			else if (skipCountdown)
 			{
 				#if android
-				MusicbeatState.androidc.visible = true;
+				MusicBeatState.androidc.visible = true;
 				if (MusicBeatState.checkHitbox != true) MusicBeatState.androidc.alpha = 1;
 				#end
 				setSongTime(0);
@@ -1914,7 +1914,7 @@ class PlayState extends MusicBeatState
 		}
 
 		#if android
-		MusicbeatState.androidc.y = 0;
+		MusicBeatState.androidc.y = 0;
 		#end
 	}
 
