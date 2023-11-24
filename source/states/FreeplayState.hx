@@ -634,7 +634,7 @@ class FreeplayState extends MusicBeatState
 
 			try
 			{
-				PlayState.SONG.song = Song.loadFromJson(poop, songLowercase);
+				PlayState.SONG = Song.loadFromJson(poop, songLowercase);
 				PlayState.isStoryMode = false;
 				PlayState.storyDifficulty = curDifficulty;
 

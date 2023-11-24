@@ -436,7 +436,8 @@ class PlayState extends MusicBeatState
 
 		#if android
 		addAndroidControls();
-		MusicBeatState.androidc.cameras = [camOther];
+		MusicBeatState.androidc.visible = true;
+		MusicBeatState.androidc.alpha = 0.000001;
 		#end
 
 		#if desktop
@@ -907,6 +908,15 @@ class PlayState extends MusicBeatState
 
 		FlxG.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyPress);
 		FlxG.stage.addEventListener(KeyboardEvent.KEY_UP, onKeyRelease);
+
+		if (startTimer != null) {
+			if(startTimer.finished){
+				#if android
+				MusicBeatState.androidc.visible = true;
+					if (MusicBeatState.checkHitbox != true) MusicBeatState.androidc.alpha = 1;
+				#end
+			}
+		}
 		callOnScripts('onCreatePost');
 
 		cacheCountdown();
@@ -1264,6 +1274,10 @@ class PlayState extends MusicBeatState
 			}
 			else if (skipCountdown)
 			{
+				#if android
+				MsuicbeatState.androidc.visible = true;
+				if (MusicBeatState.checkHitbox != true) MusicBeatState.androidc.alpha = 1;
+				#end
 				setSongTime(0);
 				return true;
 			}
@@ -1293,6 +1307,12 @@ class PlayState extends MusicBeatState
 				switch (swagCounter)
 				{
 					case 0:
+						if (!skipCounter) {
+							#if android
+							MusicBeatState.androidc.visible = true;
+							if (MusicBeatState.checkHitbox != true) MusicBeatState.androidc.alpha = 1;
+							#end
+						}
 						FlxG.sound.play(Paths.sound('intro3' + introSoundsSuffix), 0.6);
 						tick = THREE;
 					case 1:
@@ -1892,6 +1912,10 @@ class PlayState extends MusicBeatState
 			callOnScripts('onResume');
 			resetRPC(startTimer != null && startTimer.finished);
 		}
+
+		#if android
+		MusicbeatState.androidc.y = 0;
+		#end
 	}
 
 		super.closeSubState();
@@ -1975,7 +1999,7 @@ class PlayState extends MusicBeatState
 			botplayTxt.alpha = 1 - Math.sin((Math.PI * botplaySine) / 180);
 		}
 
-		if (controls.PAUSE && startedCountdown && canPause)
+		if (controls.PAUSE #if android || FlxG.android.justReleased.BACK #end && startedCountdown && canPause)
 		{
 			var ret:Dynamic = callOnScripts('onPause', null, true);
 			if(ret != FunkinLua.Function_Stop) {
@@ -2240,16 +2264,6 @@ class PlayState extends MusicBeatState
 		persistentDraw = true;
 		paused = true;
 
-		//FlxTween.tween(timeBar, {alpha: 0.6}, 0.4, {ease: FlxEase.quartInOut});
-
-		// 1 / 1000 chance for Gitaroo Man easter egg
-		/*if (FlxG.random.bool(0.1))
-		{
-			// gitaroo man easter egg
-			cancelMusicFadeTween();
-			MusicBeatState.switchState(new GitarooPause());
-		}
-		else {*/
 		if(FlxG.sound.music != null) {
 			FlxG.sound.music.pause();
 			vocals.pause();
@@ -2264,18 +2278,6 @@ class PlayState extends MusicBeatState
 				}
 		}
 		openSubState(new PauseModeSubState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
-		//}
-
-		/*if (ClientPrefs.data.language == 'Spanish') {
-			//kill();
-			add(new Notification(camGame, "El Juego Se a Pausado!!", "Presiona 'Esc' para reanudar o selecciona la opcion 'resume'", 0));
-			}
-			if (ClientPrefs.data.language == 'Inglish') {
-			add(new Notification(camGame, "The Game Has Been Paused!!", "Press 'Esc' to resume or select the 'resume' option", 0));
-			}
-			if (ClientPrefs.data.language == 'Portuguese') {
-			add(new Notification(camGame, "O jogo foi pausado!!", "Pressione 'Esc' para continuar ou selecione a opção 'resume'", 0));
-			}*/
 
 		#if desktop
 		DiscordClient.changePresence(detailsPausedText, SONG.song + " (" + storyDifficultyText + ")", iconP2.getCharacter());
@@ -2788,6 +2790,9 @@ class PlayState extends MusicBeatState
 			}
 		}
 
+		#if android
+		MusicBeatState.androidc.alpha = 0.00001;
+		#end
 		timeBar.visible = false;
 		timeTxt.visible = false;
 		canPause = false;
@@ -2846,6 +2851,10 @@ class PlayState extends MusicBeatState
 //					if(FlxTransitionableState.skipNextTransIn) {
 //						CustomFadeTransition.nextCamera = null;
 //(())					}
+
+					#if android
+						MusicBeatState.androidc.visible = false;
+					#end
 				FlxTween.tween(transBlack, {alpha: 1}, 1, {
 					onComplete: function(twn:FlxTween) {
 						MusicBeatState.switchState(new StoryMenuState());
@@ -2884,6 +2893,10 @@ class PlayState extends MusicBeatState
 						}
 					});
 
+					#if android
+					MusicBeatState.androidc.visible = false;
+					#end
+
 				}
 			}
 			else
@@ -2902,6 +2915,10 @@ class PlayState extends MusicBeatState
 						changedDifficulty = false;
 					}
 				});
+				
+				#if android
+				MusicBeatState.androidc.visible = false;
+				#end
 				//FlxG.sound.playMusic(Paths.music('freakyMenu'));
 			}
 			transitioning = true;
