@@ -7710,7 +7710,7 @@
 		"disableNoteRGB": true,
 		"song": "Loose-Shot",
 		"stage": "philly2",
-		"needsVoices": true,
+		"needsVoices": false,
 		"validScore": true,
 		"speed": 3,
 		"bpm": 174
