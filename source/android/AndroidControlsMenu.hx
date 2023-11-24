@@ -146,7 +146,7 @@ class AndroidControlsMenu extends MusicBeatState
 		}
 
 		#if android
-		if (MusicBeatState._virtualpad.buttonB.pressed) {
+		if (MusicBeatState._virtualpad.buttonB.pressed == true) {
 			save();
 			FlxTransitionableState.skipNextTransIn = true;
 			FlxTransitionableState.skipNextTransOut = true;

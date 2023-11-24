@@ -186,10 +186,10 @@ class OptionsState extends MusicBeatState
 
 	override function update(elapsed:Float) {
 
-		if (MusicBeatState._virtualpad.buttonUp.pressed = true) {
+		if (MusicBeatState._virtualpad.buttonUp.pressed == true) {
 			changeSelection(-1);
 		}
-		if (MusicBeatState._virtualpad.buttonDown.pressed = true) {
+		if (MusicBeatState._virtualpad.buttonDown.pressed == true) {
 			changeSelection(1);
 		}
 

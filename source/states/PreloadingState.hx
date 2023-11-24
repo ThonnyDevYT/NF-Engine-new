@@ -50,13 +50,13 @@ class PreloadingState extends MusicBeatState
 
     override function update(elapsed:Float)
     {
-            if (MusicBeatState._virtualpad.buttonA) {
+            if (MusicBeatState._virtualpad.buttonA == true) {
                 ClientPrefs.data.Welcome = true;
                   ClientPrefs.saveSettings();
                   ClientPrefs.loadPrefs();
                   Press = true;
                   FlxG.sound.play(Paths.sound('confirmMenu'));
-                  FlxTween.tween.cancel();
+                  tween.cancel();
                         FlxTween.tween(WarnText2, {alpha: 0}, 4, {
                             onComplete: function (twn:FlxTween) {
                                 openSubState(new options.InitialSettings());
@@ -65,12 +65,12 @@ class PreloadingState extends MusicBeatState
                         }});
                     }
         
-            if (MusicBeatState._virtualpad.buttonB) {
+            if (MusicBeatState._virtualpad.buttonB == true) {
             ClientPrefs.data.Welcome = true;
             ClientPrefs.saveSettings();
             ClientPrefs.loadPrefs();
             FlxG.sound.play(Paths.sound('cancelMenu'));
-            FlxTween.tween.cancel();
+            tween.cancel();
             FlxG.camera.fade(FlxColor.BLACK, 1, false);
 
             FlxTween.tween(bg, {alpha: 0}, 1.2, {
