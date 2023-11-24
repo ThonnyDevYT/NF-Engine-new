@@ -138,23 +138,20 @@ class BaseOptionsMenu extends MusicBeatSubstate
 	var holdValue:Float = 0;
 	override function update(elapsed:Float)
 	{
-		if (controls.UI_UP)
+		if (controls.UI_UP_P)
 		{
 			changeSelection(-1);
 		}
-		if (controls.UI_DOWN)
+		if (controls.UI_DOWN_P)
 		{
 			changeSelection(1);
 		}
 
 		if (controls.BACK) {
-			close();
 			FlxG.sound.play(Paths.sound('cancelMenu'));
 			ClientPrefs.saveSettings();
-			//ClientPrefs.loadPrefs();
-			//ClientPrefs.loadPrefs();
-			//add(new Notification(null, "Ajustes!", "Los Ajustes Se Guardaron Exitosamente!!", 0));
-			//ClientPrefs.loadPrefs();
+			ClientPrefs.loadPrefs();
+			close();
 		}
 
 		#if desktop

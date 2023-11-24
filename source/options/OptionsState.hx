@@ -15,7 +15,6 @@ class OptionsState extends MusicBeatState
 		'Graphics',
 		'Visuals UI',
 		'Gameplay',
-		'ControlsSubState',
 		'NewOptions',
 		#if DEMO_MODE
 		'Debug Config'
@@ -61,8 +60,6 @@ class OptionsState extends MusicBeatState
 				openSubState(new options.InitialSettings());
 			case 'Adjust':
 				MusicBeatState.switchState(new options.NoteOffsetState());
-			case 'ControlsSubState':
-				openSubState(new options.ControlsSubState());
 			case 'NewOptions':
 				if (ClientPrefs.data.language == 'Spanish') {
 					//add(new Notification(null, "Error!!", "Al parecer esta opcion esta Bloqueada por una condicion!!", 1));
@@ -166,7 +163,7 @@ class OptionsState extends MusicBeatState
 	}
 
 	public function onClickControls() {
-		openSubState(new options.ControlsSubState());
+		MusicBeatState.switchState(new android.AndroidControlsMenu());
 	}
 
 	public function onClickReload() {
@@ -174,22 +171,25 @@ class OptionsState extends MusicBeatState
 		ClientPrefs.saveSettings();
 		MusicBeatState.switchState(new options.OptionsState());
 
+		#if desktop
 		FlxG.resizeWindow(ClientPrefs.data.width, ClientPrefs.data.height);
+		#end
 
 		trace('Se Forzo la Carga de los ajustes!!');
 	}
 
 	override function closeSubState() {
 		super.closeSubState();
+		changeSelection();
 		ClientPrefs.saveSettings();
 	}
 
 	override function update(elapsed:Float) {
 
-		if (controls.UI_UP_P) {
+		if (MusicBeatState._virtualpad.buttonUp.pressed = true) {
 			changeSelection(-1);
 		}
-		if (controls.UI_DOWN_P) {
+		if (MusicBeatState._virtualpad.buttonDown.pressed = true) {
 			changeSelection(1);
 		}
 

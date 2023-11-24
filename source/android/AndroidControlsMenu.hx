@@ -112,11 +112,15 @@ class AndroidControlsMenu extends MusicBeatState
 		shiftPozition.borderSize = 2;
 		add(shiftPozition);
 
-		var tipText:FlxText = new FlxText(10, FlxG.height - 24, 0, 'Press BACK to Go Back to Options Menu', 16);
+		var tipText:FlxText = new FlxText(10, FlxG.height - 24, 0, 'Press [B] to Go Back to Options Menu', 16);
 		tipText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		tipText.borderSize = 2;
 		tipText.scrollFactor.set();
 		add(tipText);
+
+		#if android
+		addVirtualPad(NONE, B);
+		#end
 
 		changeSelection(0);
 	}
@@ -140,6 +144,15 @@ class AndroidControlsMenu extends MusicBeatState
 			}
 			trackbutton(touch);
 		}
+
+		#if android
+		if (MusicBeatState._virtualpad.buttonB.pressed) {
+			save();
+			FlxTransitionableState.skipNextTransIn = true;
+			FlxTransitionableState.skipNextTransOut = true;
+			MusicBeatState.switchState(new options.OptionsState());
+		}
+		#end
 		
 		#if android
 		if (FlxG.android.justReleased.BACK)
