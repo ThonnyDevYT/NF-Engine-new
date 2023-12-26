@@ -133,7 +133,7 @@ class Main extends Sprite
 		#end
 
 		#if desktop
-		backend.MusicBeatState.updatestate("TitleMenu", ClientPrefs.data.language);
+		//backend.MusicBeatState.updatestate("TitleMenu", ClientPrefs.data.language);
 		#end
 
 		if (ClientPrefs.data.width == 1280 && ClientPrefs.data.height == 720) {
@@ -221,7 +221,7 @@ class Main extends Sprite
 
 		Sys.exit(1);
 
-		Application.current.window.alert(errMsg, "Error!");
+		//Application.current.window.alert(errMsg, "Error!");
 		#if desktop
 		DiscordClient.shutdown();
 		#end
