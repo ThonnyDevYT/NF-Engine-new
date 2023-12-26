@@ -912,6 +912,8 @@ class PlayState extends MusicBeatState
 		if (ClientPrefs.data.overlays == true) add(overlay);
 		if  (ClientPrefs.data.overlays == true) add(overlayLoost);
 
+		//add(new youSTate(Functions));
+
 		botplayTxt = new FlxText(400, timeBar.y + 55, FlxG.width - 800, "BOTPLAY", 32);
 		botplayTxt.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		botplayTxt.scrollFactor.set();

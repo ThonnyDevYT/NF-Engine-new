@@ -13,8 +13,6 @@ import openfl.system.System;
 import flixel.ui.FlxButton;
 import flixel.math.FlxPoint;
 
-import shaders.GlitchMode;
-
 import shaders.ColorSwap;
 
 import flixel.tweens.misc.ColorTween;
@@ -188,6 +186,7 @@ class TitleState extends MusicBeatState
 
 		ClientPrefs.loadPrefs();
 
+		#if desktop
 		if (ClientPrefs.data.Welcome == true) {
 			trace('cheking for release video');
 			var htss = new haxe.Http("https://raw.githubusercontent.com/ThonnyDevYT/FNFVersion/main/Link_video.txt");
@@ -279,6 +278,7 @@ class TitleState extends MusicBeatState
 
 			htps.request();
 		}
+		#end
 
 		Highscore.load();
 

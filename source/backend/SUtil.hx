@@ -139,7 +139,9 @@ class SUtil
 
 	private static function applicationAlert(title:String, description:String)
 	{
+		#if desktop
 		Application.current.window.alert(description, title);
+		#end
 	}
 
 	#if android
