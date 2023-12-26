@@ -406,7 +406,7 @@ class PlayState extends MusicBeatState
 		Paths.clearUnusedMemory();
 
 		startCallback = startCountdown;
-		endCallback = startAchievement();
+		endCallback = startAchievement;
 
 		// for lua
 		instance = this;
@@ -3149,7 +3149,6 @@ class PlayState extends MusicBeatState
 		return true;
 	}
 
-	#if ACHIEVEMENTS_ALLOWED
 	var achievementObj:AchievementPopup = null;
 	var notifi:Notification = null;
 	public function startAchievement() {
@@ -3172,7 +3171,6 @@ class PlayState extends MusicBeatState
 				}
 			});
 	}
-	#end
 
 	public function KillNotes() {
 		while(notes.length > 0) {
