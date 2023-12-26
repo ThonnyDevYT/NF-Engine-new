@@ -61,7 +61,8 @@ class ChartingState extends MusicBeatState
 		'GF Sing',
 		'No Animation',
 		'nota de peligro',
-		'Attack Note'
+		'Attack Note',
+		'Glitch Note'
 	];
 	public var ignoreWarnings = false;
 	var curNoteTypes:Array<String> = [];
@@ -70,14 +71,13 @@ class ChartingState extends MusicBeatState
 	var eventStuff:Array<Dynamic> =
 	[
 		['', "Nothing. Yep, that's right."],
-		['Dadbattle Spotlight', "Used in Dad Battle,\nValue 1: 0/1 = ON/OFF,\n2 = Target Dad\n3 = Target BF"],
 		['Hey!', "Plays the \"Hey!\" animation from Bopeebo,\nValue 1: BF = Only Boyfriend, GF = Only Girlfriend,\nSomething else = Both.\nValue 2: Custom animation duration,\nleave it blank for 0.6s"],
 		['Set GF Speed', "Sets GF head bopping speed,\nValue 1: 1 = Normal speed,\n2 = 1/2 speed, 4 = 1/4 speed etc.\nUsed on Fresh during the beatbox parts.\n\nWarning: Value must be integer!"],
 		['Philly Glow', "Exclusive to Week 3\nValue 1: 0/1/2 = OFF/ON/Reset Gradient\n \nNo, i won't add it to other weeks."],
-		['Kill Henchmen', "For Mom's songs, don't use this please, i love them :("],
 		['Add Camera Zoom', "Used on MILF on that one \"hard\" part\nValue 1: Camera zoom add (Default: 0.015)\nValue 2: UI zoom add (Default: 0.03)\nLeave the values blank if you want to use Default."],
 		['BG Freaks Expression', "Should be used only in \"school\" Stage!"],
 		['Trigger BG Ghouls', "Should be used only in \"schoolEvil\" Stage!"],
+		['BG Alpha', "Only used in Spooky"],
 		['Play Animation', "Plays an animation on a Character,\nonce the animation is completed,\nthe animation changes to Idle\n\nValue 1: Animation to play.\nValue 2: Character (Dad, BF, GF)"],
 		['Camera Follow Pos', "Value 1: X\nValue 2: Y\n\nThe camera won't change the follow point\nafter using this, for getting it back\nto normal, leave both values blank."],
 		['Alt Idle Animation', "Sets a specified suffix after the idle animation name.\nYou can use this to trigger 'idle-alt' if you set\nValue 2 to -alt\n\nValue 1: Character to set (Dad, BF or GF)\nValue 2: New suffix (Leave it blank to disable)"],
@@ -91,8 +91,15 @@ class ChartingState extends MusicBeatState
 		['Arrow Position Minus', "Value 1: x positioned decrease\nValue 2: y positioned decrease\n\nCambia la posicion original de las fechas\nesto disminuye sus posicion original"],
 		['Warning', "Value 1: Alpha\nValue 2: Timer (In + Out)\n\nUna advertencia de Disparo!!\n\nEl Valor 1 representa la opacidad hasta la que va llegar la imagen\nEl Valor 2 Representa lo qe tarda en entrar y salir de la Pantalla"],
 		['change stage', "Solo cambiara si tiene archivos pre ajustados!!"],
-		['Alpha HUD', "Value 1: Alpha\nValue 2: Time"]
-	
+		['Alpha HUD', "Value 1: Alpha\nValue 2: Time"],
+		['Fade Camera', "Value 1: Alpha\nValue 2: Time\n\nHace un efecto de transaccion en \nTodas las Camaras\nEl Valor 1 es el estado del effecto [1: Apagado - 0: Encendido]"],
+		['Volume Song', "Value 1: Volume\nValue 2: Time\n\nHace un efecto de sonido\nque hace una transaccion en el [Inst] y el [Vocals]\nEl Valor 1 es el objectivo de volumen\nEl Valor 2 es el Tiempo que tarda en llegar a el Objectivo"],
+		['Flash', "Value 1: Color\nValue 2: Duracion\n\n[0: BLANCO\n1: NEGRO\n2: VERDE\n3: AMARILLO\n4: AZUL\n5: ROJO\n6: ROSADO\n7: MORADO"],
+		['Background Black', "Value 1: Status\nValue 2: Duracion\n\nHace que el Fondo con los Personajes Desaparesca\n\n[1: ENCENDIDO\n2: APAGADO"],
+		['damage', "Value 1: Dano\nValue 2: Seguro\n\nValor 1 = 0% - 100%\nValor 2 = Seguridad (Si el valor en ese momento mata al Jugador\n[1: ENCENDIDO - 2: APAGADO]"],
+		['change BG Pixel', "Only in School Stage"],
+		['movedArrows', "Value 1: x\nValue 2: y\nValue 3: duration\n\nMueve Todas Flechas en una ubicacion\nEstablecida por el usuario este no retorna a su ubicacion\noriginal"],
+		['movedArrows Retorned', "Value 1: x\nValue 2: y\nValue 3: duration\n\nMueve Todas Flechas en una ubicacion\nEstablecida por el usuario este si retorna a su ubicacion\noriginal"]
 	];
 
 	var _file:FileReference;
@@ -109,6 +116,8 @@ class ChartingState extends MusicBeatState
 	private static var lastSong:String = '';
 
 	var bpmTxt:FlxText;
+
+	public var pauseMode:Bool = false;
 
 	var camPos:FlxObject;
 	var strumLine:FlxSprite;
@@ -154,6 +163,7 @@ class ChartingState extends MusicBeatState
 
 	var value1InputText:FlxUIInputText;
 	var value2InputText:FlxUIInputText;
+	var value3InputText:FlxUIInputText;
 	var currentSongName:String;
 
 	var zoomTxt:FlxText;
@@ -217,7 +227,13 @@ class ChartingState extends MusicBeatState
 				player2: 'dad',
 				gfVersion: 'gf',
 				speed: 1,
-				stage: 'stage'
+				stage: 'stage',
+				mision1: true,
+				mision2: false,
+				mision3: false,
+				mision4: false,
+				mision5: false,
+				BGFreeplay: ''
 			};
 			addSection();
 			PlayState.SONG = _song;
@@ -334,20 +350,20 @@ class ChartingState extends MusicBeatState
 		UI_box.scrollFactor.set();
 
 		text =
-		"W/S or Mouse Wheel - Change Conductor's strum time
-		\nA/D - Go to the previous/next section
-		\nLeft/Right - Change Snap
+		"W/S o Rueda del Mouse - Sube o Baja de forma fluida en la seccion
+		\nA/D - La Siguiente/Anterior Seccion
+		\nLeft/Right - Cambia la velocidad de la subida y bajada
 		\nUp/Down - Change Conductor's Strum Time with Snapping
-		\nLeft Bracket / Right Bracket - Change Song Playback Rate (SHIFT to go Faster)
+		\nLeft Bracket / Right Bracket - Cambia el Playback (SHIFT para ir mas rapido)
 		\nALT + Left Bracket / Right Bracket - Reset Song Playback Rate
-		\nHold Shift to move 4x faster
+		\nHold Shift para moverse x4 mas rapido
 		\nHold Control and click on an arrow to select it
-		\nZ/X - Zoom in/out
+		\nZ/X - Zoom Aumentar/Disminuir
 		\n
-		\nEsc - Test your chart inside Chart Editor
-		\nEnter - Play your chart
-		\nQ/E - Decrease/Increase Note Sustain Length
-		\nSpace - Stop/Resume song";
+		\nEsc - Probar el Chart(Solo las Flechas)
+		\nEnter - Ejecutar Chart
+		\nQ/E - Disminuye/Aumenta Largo de la Flecha
+		\nSpace - Detener/Iniciar Cancion";
 
 		var tipTextArray:Array<String> = text.split('\n');
 		for (i in 0...tipTextArray.length) {
@@ -432,7 +448,13 @@ class ChartingState extends MusicBeatState
 			null, ignoreWarnings));
 		});
 
-		var loadEventJson:FlxButton = new FlxButton(reloadSongJson.x, reloadSongJson.y + 30, 'Load Events', function()
+		var loadAutosaveBtn:FlxButton = new FlxButton(reloadSongJson.x, reloadSongJson.y + 30, 'Load Autosave', function()
+		{
+			PlayState.SONG = Song.parseJSONshit(FlxG.save.data.autosave);
+			MusicBeatState.resetState();
+		});
+
+		var loadEventJson:FlxButton = new FlxButton(loadAutosaveBtn.x, loadAutosaveBtn.y + 30, 'Load Events', function()
 		{
 
 			var songName:String = Paths.formatToSongPath(_song.song);
@@ -596,6 +618,7 @@ class ChartingState extends MusicBeatState
 		tab_group_song.add(saveEvents);
 		tab_group_song.add(reloadSong);
 		tab_group_song.add(reloadSongJson);
+		tab_group_song.add(loadAutosaveBtn);
 		tab_group_song.add(loadEventJson);
 		tab_group_song.add(stepperBPM);
 		tab_group_song.add(stepperSpeed);
@@ -997,6 +1020,8 @@ class ChartingState extends MusicBeatState
 
 		descText = new FlxText(20, 200, 0, eventStuff[0][0]);
 
+		//eventCalled
+
 		var leEvents:Array<String> = [];
 		for (i in 0...eventStuff.length) {
 			leEvents.push(eventStuff[i][0]);
@@ -1026,6 +1051,11 @@ class ChartingState extends MusicBeatState
 		tab_group_event.add(text);
 		value2InputText = new FlxUIInputText(20, 150, 100, "");
 		blockPressWhileTypingOn.push(value2InputText);
+
+		var text:FlxText = new FlxText(20, 170, 0, "Value 3:");
+		tab_group_event.add(text);
+		value3InputText = new FlxUIInputText(20, 190, 100, "");
+		blockPressWhileTypingOn.push(value3InputText);
 
 		// New event buttons
 		var removeButton:FlxButton = new FlxButton(eventDropDown.x + eventDropDown.width + 10, eventDropDown.y, '-', function()
@@ -1105,6 +1135,7 @@ class ChartingState extends MusicBeatState
 		tab_group_event.add(descText);
 		tab_group_event.add(value1InputText);
 		tab_group_event.add(value2InputText);
+		tab_group_event.add(value3InputText);
 		tab_group_event.add(eventDropDown);
 
 		UI_box.addGroup(tab_group_event);
@@ -1572,6 +1603,13 @@ class ChartingState extends MusicBeatState
 						updateGrid();
 					}
 				}
+				else if(sender == value3InputText) {
+					if(curSelectedNote[1][curEventSelected] != null)
+						{
+							curSelectedNote[1][curEventSelected][3] = value3InputText.text;
+							updateGrid();
+						}
+				}
 				else if(sender == strumTimeInputText) {
 					var value:Float = Std.parseFloat(strumTimeInputText.text);
 					if(Math.isNaN(value)) value = 0;
@@ -1785,7 +1823,7 @@ class ChartingState extends MusicBeatState
 				autosaveSong();
 				PlayState.chartingMode = false;
 				MusicBeatState.switchState(new states.editors.MasterEditorMenu());
-				FlxG.sound.playMusic(Paths.music('freakyMenu'));
+				//FlxG.sound.playMusic(Paths.music('freakyMenu'));
 				FlxG.mouse.visible = false;
 				return;
 			}
@@ -1829,10 +1867,10 @@ class ChartingState extends MusicBeatState
 				else
 				{
 					if(vocals != null) {
-					//	vocals.play();
+						vocals.play();
 						vocals.pause();
 						vocals.time = FlxG.sound.music.time;
-					//	vocals.play();
+						vocals.play();
 					}
 					FlxG.sound.music.play();
 				}
@@ -2083,7 +2121,8 @@ class ChartingState extends MusicBeatState
 		"\nSection: " + curSec +
 		"\n\nBeat: " + Std.string(curDecBeat).substring(0,4) +
 		"\n\nStep: " + curStep +
-		"\n\nBeat Snap: " + quantization + "th";
+		"\n\nBeat Snap: " + quantization + "th" + 
+		"\n\nSONG: " + UI_songTitle.text;
 
 		var playedSound:Array<Bool> = [false, false, false, false]; //Prevents ouchy GF sex sounds
 		curRenderedNotes.forEachAlive(function(note:Note) {
@@ -2672,6 +2711,7 @@ class ChartingState extends MusicBeatState
 				}
 				value1InputText.text = curSelectedNote[1][curEventSelected][1];
 				value2InputText.text = curSelectedNote[1][curEventSelected][2];
+				value3InputText.text = curSelectedNote[1][curEventSelected][3];
 			}
 			strumTimeInputText.text = '' + curSelectedNote[0];
 		}
@@ -3002,7 +3042,8 @@ class ChartingState extends MusicBeatState
 			var event = eventStuff[Std.parseInt(eventDropDown.selectedId)][0];
 			var text1 = value1InputText.text;
 			var text2 = value2InputText.text;
-			_song.events.push([noteStrum, [[event, text1, text2]]]);
+			var text3 = value3InputText.text;
+			_song.events.push([noteStrum, [[event, text1, text2, text3]]]);
 			curSelectedNote = _song.events[_song.events.length - 1];
 			curEventSelected = 0;
 		}

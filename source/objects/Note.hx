@@ -16,7 +16,8 @@ typedef EventNote = {
 	strumTime:Float,
 	event:String,
 	value1:String,
-	value2:String
+	value2:String,
+	value3:String
 }
 
 typedef NoteSplashData = {
@@ -61,6 +62,7 @@ class Note extends FlxSprite
 	public var eventLength:Int = 0;
 	public var eventVal1:String = '';
 	public var eventVal2:String = '';
+	public var eventVal3:String = '';
 
 	public var rgbShader:RGBShaderReference;
 	public static var globalRgbShaders:Array<RGBPalette> = [];
@@ -175,6 +177,13 @@ class Note extends FlxSprite
 
 				case 'Speed Note':
 					velocityadd = true;
+				
+				case 'Glitch Note':
+					reloadNote('GlitchNote_assets');
+
+					hitsound = 'note-sound/glitch';
+
+					hitCausesMiss = true;
 					
 				case 'Hurt Note':
 					ignoreNote = mustPress;

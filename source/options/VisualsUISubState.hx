@@ -12,6 +12,9 @@ class VisualsUISubState extends BaseOptionsMenu
 	var noteY:Float = 90;
 	public function new()
 	{
+
+		MusicBeatState.updatestate("Visuals and UI");
+
 		if (ClientPrefs.data.language == 'Inglish') {
 		title = 'Visuals and UI';
 		rpcTitle = 'Visuals & UI Settings Menu'; //for Discord Rich Presence
@@ -142,11 +145,13 @@ class VisualsUISubState extends BaseOptionsMenu
 		title = 'Imágenes y UI';
 		rpcTitle = 'Menú de configuración de imágenes y UI'; //for Discord Rich Presence
 
+		var musics:Array<String> = Mods.mergeAllTextsNamed('music/list.txt', 'shared');
+
 			var option:Option = new Option('Music:',
 			'Musica del Juego en los Menus',
-			'musicstate',
+			'musicState',
 			'String',
-			['Hallucination', 'disabled']);
+			musics);
 		option.onChange = onMusic; 
 		addOption(option);
 		
@@ -197,6 +202,12 @@ class VisualsUISubState extends BaseOptionsMenu
 			'Welcome',
 			'bool');
 			addOption(option);
+
+		var option:Option = new Option('Dowload',
+		'Beat Option not Original',
+		'downloadMode',
+		'bool');
+		addOption(option);
 		
 		var option:Option = new Option('Barra de tiempo:',
 			"¿Qué debería mostrar la barra de tiempo?\n'Song Name' Mustra tambien la Difficultad de la Musica",
@@ -477,30 +488,57 @@ class VisualsUISubState extends BaseOptionsMenu
 		changedMusic = true;
 	}
 
-	var changeMusicState:Bool = false;
+	var changemusicState:Bool = false;
 	function onMusic() {
-		if(ClientPrefs.data.musicstate != 'disabled') {
-			FlxG.sound.playMusic(Paths.music(ClientPrefs.data.musicstate));
+		if(ClientPrefs.data.musicState != 'disabled') {
+			FlxG.sound.playMusic(Paths.music(ClientPrefs.data.musicState));
 		}
-		if (ClientPrefs.data.musicstate == 'disabled') {
+		if (ClientPrefs.data.musicState == 'disabled') {
 			FlxG.sound.music.volume = 0;
 		}
 		
-		changeMusicState = true;
+		changemusicState = true;
 	}
 
 
 	override function destroy()
 	{
-		if(changedMusic && !OptionsState.onPlayState) FlxG.sound.playMusic(Paths.music('freakyMenu'), 1, true);
+		if(changedMusic && !OptionsState.onPlayState) //FlxG.sound.playMusic(Paths.music('freakyMenu'), 1, true);
 		super.destroy();
 	}
 
 	#if !mobile
 	function onChangeFPSCounter()
 	{
-		if(Main.fpsVar != null)
-			Main.fpsVar.visible = ClientPrefs.data.showFPS;
+		if(Main.fpsVar != null) {
+			//Main.fpsVar.visible = ClientPrefs.data.showFPS;
+			if (ClientPrefs.data.showFPS == true) {
+				FlxTween.tween(Main.fpsVar, {x: 10}, 0.5);	
+			}
+
+			if (ClientPrefs.data.showFPS == false) {
+				FlxTween.tween(Main.fpsVar, {x: -200}, 0.5);
+			}
+		}
+		if(Main.memoryVar != null) {
+			//Main.memoryVar.visible = ClientPrefs.data.showFPS;
+			if (ClientPrefs.data.showFPS == true) {
+				FlxTween.tween(Main.memoryVar, {x: 10}, 0.5);	
+			}
+
+			if (ClientPrefs.data.showFPS == false) {
+				FlxTween.tween(Main.memoryVar, {x: -200}, 0.5);
+			}
+		}
+		if (Main.coinVar != null) {
+			if (ClientPrefs.data.showFPS == true) {
+				FlxTween.tween(Main.coinVar, {x: 10}, 0.5);	
+			}
+
+			if (ClientPrefs.data.showFPS == false) {
+				FlxTween.tween(Main.coinVar, {x: -200}, 0.5);
+			}
+		}
 	}
 	#end
 }

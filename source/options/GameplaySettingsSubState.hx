@@ -4,6 +4,8 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 {
 	public function new()
 	{
+		MusicBeatState.updatestate("Gameplay Sttings");
+
 		if (ClientPrefs.data.language == 'Inglish') {
 		title = 'Gameplay Settings';
 		rpcTitle = 'Gameplay Settings Menu'; //for Discord Rich Presence

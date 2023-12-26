@@ -38,6 +38,8 @@ class PauseModeSubState extends MusicBeatSubstate
 
     var item:FlxText;
 
+    var overlaySelected:FlxSprite;
+
     public static var songName:String = '';
 
     public function new(x:Float, y:Float)
@@ -76,6 +78,11 @@ class PauseModeSubState extends MusicBeatSubstate
             box.updateHitbox();
             add(box);
 
+            overlaySelected = new FlxSprite(0, 0).loadGraphic(Paths.image('pausemenu/OverlayOption'));
+            overlaySelected.antialiasing = ClientPrefs.data.antialiasing;
+            overlaySelected.alpha = 0;
+            add(overlaySelected);
+
             var levelInfo:FlxText = new FlxText(20,15, 0, 'Notas Presionas: ' + PlayState.hitnotesong + ' | ' + PlayState.SONG.song + ' | ' + Difficulty.getString().toUpperCase(), 32);
             levelInfo.scrollFactor.set();
             levelInfo.setFormat(Paths.font("vcr.ttf"), 32);
@@ -87,6 +94,7 @@ class PauseModeSubState extends MusicBeatSubstate
             levelInfo.x = FlxG.width - (levelInfo.width + 20);
 
             FlxTween.tween(bg, {alpha: 0.6}, 0.3, {ease: FlxEase.quartInOut});
+            FlxTween.tween(overlaySelected, {alpha: 0.6}, 0.3, {ease: FlxEase.quartInOut});
             FlxTween.tween(box, {alpha: 1}, 0.4, {
                 onComplete: function (twn:FlxTween) {
                     ready = true;
@@ -102,10 +110,6 @@ class PauseModeSubState extends MusicBeatSubstate
             missingTextBG.alpha = 0.6;
             missingTextBG.visible = false;
             add(missingTextBG);
-
-            #if android
-            addVirtualPad(UP_DOWN, A_B);
-            #end
 
             regenMenu();
             cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
@@ -197,6 +201,7 @@ class PauseModeSubState extends MusicBeatSubstate
                         #if desktop DiscordClient.resetClientID(); #end
                         PlayState.deathCounter = 0;
                         PlayState.seenCutscene = false;
+                        PlayState.statusGame = false;
     
                         Mods.loadTopMod();
                         if(PlayState.isStoryMode) {
@@ -258,12 +263,16 @@ class PauseModeSubState extends MusicBeatSubstate
                                     item.ID = bullShit - curSelected;
                                     bullShit++;
                         
-                                    item.alpha = 0.6;
+                                    item.alpha = 0.4;
                         
                                     if (item.ID == 0)
                                     {
                                         item.alpha = 1;
                                         item.screenCenter(X);
+
+                                        overlaySelected.setGraphicSize(item.width + 25, item.height + 25);
+                                        overlaySelected.y = item.y + 3;
+                                        overlaySelected.screenCenter(X);
                                     }
                         
                                 }

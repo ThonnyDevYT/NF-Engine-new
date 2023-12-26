@@ -102,35 +102,58 @@ class SaveVariables {
 
 
 
-	public var alphahud:Bool = true;
-	public var fullyscreen:Bool = false;
-		/*
-	[public var 'Funcion':'tipo' = 'true o false' else '0 - 80' else 'texto a eleccion';]
-	*/
+	//Initial Settings
 	public var Welcome:Bool = false;
-	public var InitialSettings:Bool = false;
-	public var language:String = 'Inglish';
 	public var graphics_internal:String = 'Medium';
-	public var fullscreen:Bool = false;
-	public var opacity_mouse:Float = 1;
 	public var Update_Support:Bool = false;
-	public var spritesFPS:String = 'Sprites: 24';
 	public var SpritesFPS:Int = 24;
-	public var Internet:String = 'disabled';
+	public var InitialSettings:Bool = false;
 	public var InternetStatus:String = 'Disconnect';
 	public var demo:Bool = true;
-	public var recordoptimization:String = 'Disabled';
+	public var downloadMode:Bool = false;
+
+	//Menu
+	public var musicState:String = 'Hallucination';
 	public var notivisible:Bool = true;
 	public var timetrans:Int = 1;
-	public var musicstate:String = 'Hallucination';
+	public var language:String = 'Inglish';
+	public var Internet:String = 'disabled';
+	public var recordoptimization:String = 'Disabled';
+
+	//GamePlay
 	public var concetration:Bool = false;
 	public var overlays:Bool = true;
 	public var dodge:Bool = true;
+	public var alphahud:Bool = true;
+
+	//Window
+	public var fullyscreen:Bool = false;
 	public var width:Int = 1280;
 	public var height:Int = 720;
+	public var fullscreen:Bool = false;
+	public var opacity_mouse:Float = 1;
+
+	//Plugins
+	public var colorplus:Bool = false;
+	public var moredebug:Bool = false;
+	public var settingsmax:Bool = false;
+
+	//Optimizations
+	public var noneAnimations:Bool = false;
+	public var noneBGAnimated:Bool = false;
+	public var noneFixeds:Bool = false;
+	public var movedComponents:Bool = false;
+	public var updateState:Bool = false;
+	public var noneNet:Bool = false;
+	public var nonePost:Bool = false;
+	public var noneMods:Bool = false;
+	public var nonePlugins:Bool = false;
+	public var updateSettings:Bool = false;
+
+	//Others
 
 	//Cuidado con esta opcion cambia el juego sin ningun tipo de problema de rendimiento!!
-	public var ultraMode:Bool = false;
+	//public var ultraMode:Bool = false; ESTA OPCION FUE ELIINADA EN LA V2.0
 	//Esta funcion da permiso a que puedas modificar cambiar usar animaciones sin tener en cuenta el rendimiento !!Solo para Pcs Modernas!!
 
 

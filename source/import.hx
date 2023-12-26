@@ -10,6 +10,11 @@ import llua.*;
 import llua.Lua;
 #end
 
+#if ACHIEVEMENTS_ALLOWED
+import backend.Achievements;
+#end
+
+import openfl.Lib;
 import backend.Paths;
 import backend.Controls;
 import backend.CoolUtil;
@@ -21,13 +26,7 @@ import backend.Conductor;
 import backend.BaseStage;
 import backend.Difficulty;
 import backend.Mods;
-import backend.SUtil;
 
-import backend.AndroidDialogsExtend;
-#if android
-import extension.devicelang.DeviceLanguage;
-#end
-  
 import objects.Alphabet;
 import objects.BGSprite;
 

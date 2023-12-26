@@ -8,10 +8,12 @@ import flixel.input.mouse.FlxMouseButton;
 import openfl.ui.MouseCursor;
 import flixel.ui.FlxSpriteButton;
 import options.Option;
+import flixel.tweens.misc.AngleTween;
 import flixel.ui.FlxButton;
 import backend.WeekData;
 import backend.Achievements;
 import openfl.utils.Timer;
+import flixel.addons.effects.chainable.FlxGlitchEffect;
 import flixel.util.FlxTimer;
 
 import openfl.filters.GlowFilter;
@@ -44,6 +46,12 @@ class MainMenuState extends MusicBeatState
 	//public static var psychEngineVersion:String = '0.7.1h'; //This is also used for Discord RPC
 	public static var endingcorruptionVersion:String = '2.0'; //Update!! to Release
 	public static var engineVersion:String = '2.3'; //update to Release
+	public static var pathVersion:String = '1.0';
+	public static var endingFloat:Float = 2.0;
+	public static var engineFloat:Float = 2.3;
+
+	public var glitch:FlxGlitchEffect;
+
 	var tipkey:FlxText;
 	var tipvideo:FlxText;
 	public static var curSelected:Int = 0;
@@ -54,15 +62,22 @@ class MainMenuState extends MusicBeatState
 	public static var bg:FlxSprite;
 	public var bgCG:FlxSprite;
 	public var TimerEffect:FlxTimer;
+	public var TimeAngle:FlxTimer;
 	public var alphaeffect:FlxTimer;
 	public var versionEngine:FlxText;
 	public var versionShit:FlxText;
+
+	public var angleTween:FlxTween;
 
 	public static var outdate:Bool;
 
 	public var settingIcon:FlxSprite;
 
 	var Nit:Bool;
+
+	var TextMove:FlxTimer;
+
+	var pressedGame:Bool = false;
 
 	//var ajustes_Button:FlxButton;
 
@@ -75,12 +90,18 @@ class MainMenuState extends MusicBeatState
 	var videoIcon:FlxSprite;
 
 	var internet:String = '';
-	var settingButton:FlxButton;
+	static var settingButton:FlxButton;
 	var videoButton:FlxButton;
 
 	public var username:TextField;
 
+	var languageTitle:String = '';
+
 	var settingIcon_off:FlxSprite;
+
+	var textShow:String = "Engine V" + engineVersion;
+
+	var indexCurret:Int = 0;
 
 	public var ignoreWarnings = false;
 
@@ -107,15 +128,33 @@ class MainMenuState extends MusicBeatState
 	var mouseOption:FlxButton;
 	var bg_vineta:FlxSprite;
 
+	public static var optionTween:FlxTween;
+
+	public static var statusOptions:Bool = false;
+
 	public function onEffect(Timer:FlxTimer):Void {
-		FlxTween.tween(bgCG, {alpha: 0}, ClientPrefs.data.timetrans + 1, {
+		if (selectedSomethin != true && !ClientPrefs.data.noneAnimations) changeItem();
+		if (ClientPrefs.data.noneAnimations) OptiChangeItem();
+		FlxTween.tween(bgCG, {alpha: 0}, ClientPrefs.data.timetrans, {
 			onComplete: function (twn:FlxTween) {
-				FlxTween.tween(bgCG, {alpha: 1}, ClientPrefs.data.timetrans + 1, {
+				if (selectedSomethin != true && !ClientPrefs.data.noneAnimations) changeItem();
+				if (ClientPrefs.data.noneAnimations) OptiChangeItem();
+				FlxTween.tween(bgCG, {alpha: 1}, ClientPrefs.data.timetrans, {
 					onComplete: function (twn:FlxTween) {
+						if (selectedSomethin != true && !ClientPrefs.data.noneAnimations) changeItem();
+						if (ClientPrefs.data.noneAnimations) OptiChangeItem();
 					}
 				});
 			}
 		});
+	}
+
+	public function onSetting(Timer:FlxTimer):Void {
+		if (!ClientPrefs.data.noneAnimations) angleTween = FlxTween.angle(settingButton, 0, 360, 4);
+		if (selectedSomethin != true && !ClientPrefs.data.noneAnimations) {
+			changeItem();
+		}
+		if (ClientPrefs.data.noneAnimations) OptiChangeItem();
 	}
 
 	public static function changeItem(huh:Int = 0)
@@ -126,34 +165,52 @@ class MainMenuState extends MusicBeatState
 				curSelected = 0;
 			if (curSelected < 0)
 				curSelected = menuItems.length - 1;
-	
+
 			menuItems.forEach(function(spr:FlxSprite)
-			{
-				//spr.animation.play('idle');
-				//spr.alpha = 0.3;
-				if (spr.ID != curSelected) {
-				FlxTween.tween(spr, {alpha: 0.3}, 0.3);
-				}
-				//spr.visible = false;
-				spr.updateHitbox();
-				//FlxTween.tween(spr.ID != curSelected, {x: -30}, 1);
-	
-				if (spr.ID == curSelected)
 				{
-					if (selectedSomethin == false) {
-					FlxTween.tween(spr, {alpha: 1}, 0.4);
-					var add:Float = 0;
-					if(menuItems.length > 4) {
-						add = menuItems.length * 8;
+					spr.updateHitbox();
+
+					if (spr.ID != curSelected && selectedSomethin == false) {
+						spr.x = -240;
+						if (!ClientPrefs.data.noneAnimations) {
+						optionTween = FlxTween.tween(spr, {alpha: 0.08}, 0.1);
+						if (spr.alpha != 0.08) spr.alpha = 0.08;
+						} else {
+						spr.alpha = 0.08;
+						}
 					}
-					spr.centerOffsets();
-				}
-				if (selectedSomethin == true) {
-					FlxTween.tween(spr, {alpha: 0.3}, 0.3);
-				}
-				}
-			});
+		
+					if (spr.ID == curSelected)
+					{
+						if (selectedSomethin == false) {					
+							if (!ClientPrefs.data.noneAnimations) {	
+						FlxTween.tween(spr, {x: 0}, 0.3);
+						FlxTween.tween(spr, {alpha: 1}, 0.2, {
+							onComplete: function(twn:FlxTween) {
+								if (spr.alpha != 1) {
+									spr.alpha = 1;
+								}
+							}
+						});
+					}
+					if (ClientPrefs.data.noneAnimations) {
+						spr.x = 0;
+						spr.alpha = 1;
+					}
+						var add:Float = 0;
+						if(menuItems.length > 4) {
+							add = menuItems.length * 8;
+						}
+						spr.centerOffsets();
+					}
+
+					}
+				});
 		}
+
+	public static function OptiChangeItem(huh:Int = 0) {
+		changeItem(huh);
+	}
 
 	override function create()
 	{
@@ -167,6 +224,8 @@ class MainMenuState extends MusicBeatState
 		DiscordClient.changePresence("In the Menus", null);
 		#end
 
+		MusicBeatState.updatestate('MainMenu');
+
 		FlxG.sound.music.fadeIn(3, 0.1, 0.8);
 
 		ClientPrefs.saveSettings();
@@ -179,14 +238,9 @@ class MainMenuState extends MusicBeatState
 		FlxG.cameras.add(camAchievement, false);
 		FlxG.cameras.setDefaultDrawTarget(camGame, true);
 
-//		transIn = FlxTransitionableState.defaultTransIn;
-	//	transOut = FlxTransitionableState.defaultTransOut;
-
 		persistentUpdate = persistentDraw = true;
 
 		var yScroll:Float = Math.max(0.25 - (0.05 * (optionShit.length - 4)), 0.1);
-
-		bg = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, 0xA5000000);
 
 		bgCG = new FlxSprite(-80).loadGraphic(Paths.image('OMMenu'));
 		bgCG.antialiasing = ClientPrefs.data.antialiasing;
@@ -216,11 +270,11 @@ class MainMenuState extends MusicBeatState
 		settingIcon.alpha = 1;
 		//add(settingIcon);
 
-		settingButton = new FlxButton(FlxG.width - 100, FlxG.height - 450, "", onClickSetting);
+		settingButton = new FlxButton(FlxG.width - 100, FlxG.height - 150, "", onClickSetting);
 		settingButton.loadGraphicFromSprite(settingIcon);
 		settingButton.scrollFactor.set();
 
-		videoButton = new FlxButton(FlxG.width - 105, FlxG.height - 650, "", onClickVideo);
+		videoButton = new FlxButton(FlxG.width - 105, FlxG.height - 250, "", onClickVideo);
 		videoButton.loadGraphicFromSprite(videoIcon);
 		videoButton.scrollFactor.set();
 
@@ -234,18 +288,10 @@ class MainMenuState extends MusicBeatState
 		}
 
 		var scale:Float = 1;
-		/*if(optionShit.length > 6) {
-			scale = 6 / optionShit.length;
-		}*/
 
 		for (i in 0...optionShit.length)
 		{
 			var offset:Float = 108 - (Math.max(optionShit.length, 4) - 4) * 80;
-			//var menuItem:FlxSprite = new FlxSprite(0, (i * 140)  + offset);
-			//menuItem.frames = Paths.getSparrowAtlas('mainmenu/menu_' + optionShit[i]);
-			//menuItem.animation.addByPrefix('idle', optionShit[i] + " basic", ClientPrefs.data.SpritesFPS);
-			//menuItem.animation.addByPrefix('selected', optionShit[i] + " white", ClientPrefs.data.SpritesFPS);
-			//menuItem.animation.play('idle');
 			var menuItem:FlxSprite = new FlxSprite(-500, (i * 115) + offset).loadGraphic(Paths.image('mainmenu/menu_' + optionShit[i]));
 			menuItem.antialiasing = ClientPrefs.data.antialiasing;
 			menuItem.scale.x = scale;
@@ -259,18 +305,26 @@ class MainMenuState extends MusicBeatState
 			menuItem.scrollFactor.set(0, scr);
 			//menuItem.setGraphicSize(Std.int(menuItem.width * 0.58));
 			menuItem.updateHitbox();
-			FlxTween.tween(menuItem, {x: 0}, ClientPrefs.data.timetrans);
+			if (!ClientPrefs.data.noneAnimations) FlxTween.tween(menuItem, {x: -240}, ClientPrefs.data.timetrans);
+			if (ClientPrefs.data.noneAnimations) FlxTween.tween(menuItem, {x: -240}, 0.001);
 			FlxTween.tween(menuItem, {alpha: 0.5}, 0.2);
 		}
 
+		if (TitleState.pathVersionOnlineM == false) {
+			outdate = true;
+			selectedSomethin = false;
+			curSelected = 0;
+			changeItem();
+		}
+
 		if (outdate != true) {
-		if (TitleState.UpdateEC) {
+		if (TitleState.pathVersionOnlineM == true) {
 			outdate = true;
 			openSubState(new states.ActAvailableState());
 		}
 	}
 
-		versionEngine = new FlxText(-100, FlxG.height - 24, 0, "Engine V" + engineVersion, 12);
+		versionEngine = new FlxText(-100, FlxG.height - 24, 0);
 		versionEngine.scrollFactor.set();
 		versionEngine.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		versionEngine.alpha = 0;
@@ -280,20 +334,39 @@ class MainMenuState extends MusicBeatState
 		add(videoButton);
 
 		FlxTween.tween(versionEngine, {alpha: 1}, 0.5);
+		if (!ClientPrefs.data.noneAnimations) {
 		FlxTween.tween(versionEngine, {x: 12}, 0.6, {
 			onComplete: function (twn:FlxTween) {
 				Nit = true;
 			}
 		});
+	}
+	if (ClientPrefs.data.noneAnimations) {
+		FlxTween.tween(versionEngine, {x: 12}, 0.001, {
+			onComplete: function (twn:FlxTween) {
+				Nit = true;
+			}
+		});
+	}
 
-		changeItem();
+		var AngleHome:FlxTimer = new FlxTimer();
+		AngleHome.start(0.000001, onSetting, 1);
 
+		if (!ClientPrefs.data.noneBGAnimated) {
 	TimerEffect = new FlxTimer();
-	TimerEffect.start(ClientPrefs.data.timetrans + 3, onEffect, 0);
+	TimerEffect.start(ClientPrefs.data.timetrans + ClientPrefs.data.timetrans, onEffect, 0);
+		}
+		if (ClientPrefs.data.noneBGAnimated) {
+			bgCG.alpha = 1;
+		}
 
-	#if android
-	addVirtualPad(UP_DOWN, A_B);
-	#end
+	if (!ClientPrefs.data.noneAnimations) {
+	TimeAngle = new FlxTimer();
+	TimeAngle.start(4, onSetting, 0);
+	}
+
+	TextMove = new FlxTimer();
+	TextMove.start(0.3, onGenerate, 0);
 
 		super.create();
 	}
@@ -325,46 +398,67 @@ class MainMenuState extends MusicBeatState
 		CoolUtil.browserLoad(TitleState.releasevideolink);
 	}
 
+	function onGenerate(Timer:FlxTimer):Void {
+        if (indexCurret < textShow.length) {
+            versionEngine.text += textShow.charAt(indexCurret);
+            indexCurret++;
+        }
+    }
+
 	override function update(elapsed:Float)
 	{
+
+		if (FlxG.mouse.justPressed || FlxG.mouse.justPressedMiddle) {
+			pressedGame = true;
+		}
+
 		FlxG.camera.followLerp = FlxMath.bound(elapsed * 9 / (FlxG.updateFramerate / 60), 0, 1);
 
-		if (settingButton.released) {
-			settingButton.alpha = 0.5;
-		}
+		if (settingButton.released && !ClientPrefs.data.noneFixeds) settingButton.alpha = 0.5;
 
-		if (settingButton.justPressed) {
-			settingButton.alpha = 1;
-		}
+		if (settingButton.justPressed && !ClientPrefs.data.noneFixeds) settingButton.alpha = 1;
 
-		if (videoButton.released) {
-			videoButton.alpha = 0.5;
-		}
+		if (videoButton.released && !ClientPrefs.data.noneFixeds) videoButton.alpha = 0.5;
 
-		if (videoButton.justPressed) {
-			videoButton.alpha = 1;
+		if (videoButton.justPressed && !ClientPrefs.data.noneFixeds) videoButton.alpha = 1;
+
+		if (!ClientPrefs.data.noneFixeds) {
+			changeItem();
 		}
+		if (ClientPrefs.data.noneAnimations) OptiChangeItem();
 
 		if (!selectedSomethin)
 		{
 			if (controls.UI_UP_P)
 			{
 				FlxG.sound.play(Paths.sound('scrollMenu'));
-				changeItem(-1);
+				if (!ClientPrefs.data.noneAnimations) changeItem(-1);
+				if (ClientPrefs.data.noneAnimations) OptiChangeItem(-1);
 			}
 
 			if (controls.UI_DOWN_P)
 			{
 				FlxG.sound.play(Paths.sound('scrollMenu'));
-				changeItem(1);
+				if (!ClientPrefs.data.noneAnimations) changeItem(1);
+				if (ClientPrefs.data.noneAnimations) OptiChangeItem(1);
 			}
 
-			if (controls.BACK)
-			{
+			if (FlxG.mouse.wheel >= 1) {
+				FlxG.sound.play(Paths.sound('scrollMenu'));
+				if (!ClientPrefs.data.noneAnimations) changeItem(-1);
+				if (ClientPrefs.data.noneAnimations) OptiChangeItem(-1);
+			}
+
+			if (FlxG.mouse.wheel <= -1) {
+				FlxG.sound.play(Paths.sound('scrollMenu'));
+				if (!ClientPrefs.data.noneAnimations) changeItem(1);
+				if (ClientPrefs.data.noneAnimations) OptiChangeItem(1);
+			}
+
+			if(FlxG.mouse.justPressedRight) {
 				FlxG.sound.play(Paths.sound('cancelMenu'));
 				FlxG.camera.flash(ClientPrefs.data.flashing ? FlxColor.RED : 0x4CFF0000, 1);
 				if (ClientPrefs.data.language == 'Spanish') {
-					//add(new Notification(camAchievement, "Accion No Permitida..", "No te podemos dejar Regresar por el Bien de la optimizacion del Juego. Gracias", 1));
 					add(new Notification('Accion no Permitida', "No te podemos dejar Regresar por el Bien de la optimizacion del Juego. Gracias", 1, camAchievement, 1));
 					//FlxG.sound.play(Paths.sound('MenuSounds/notification-1'));
 				}
@@ -374,11 +468,125 @@ class MainMenuState extends MusicBeatState
 					FlxG.sound.play(Paths.sound('notificacion-1'));
 				}
 				if (ClientPrefs.data.language == 'Portuguese') {
-					//add(new Notification(camAchievement, "Atualmente não disponível!", "Não podemos permitir que você retorne para otimizar o jogo. Obrigado", 1));
 					add(new Notification('Atualmente não disponível!', "Não podemos permitir que você retorne para otimizar o jogo. Obrigado", 1, camAchievement, 1));
 					FlxG.sound.play(Paths.sound('notificacion-1'));
 				}
 			}
+
+			if (controls.BACK)
+			{
+				FlxG.sound.play(Paths.sound('cancelMenu'));
+				FlxG.camera.flash(ClientPrefs.data.flashing ? FlxColor.RED : 0x4CFF0000, 1);
+				if (ClientPrefs.data.language == 'Spanish') {
+					add(new Notification('Accion no Permitida', "No te podemos dejar Regresar por el Bien de la optimizacion del Juego. Gracias", 1, camAchievement, 1));
+					//FlxG.sound.play(Paths.sound('MenuSounds/notification-1'));
+				}
+				if (ClientPrefs.data.language == 'Inglish') {
+					//add(new Notification(camAchievement, "Action Not Allowed..", "We cannot let you return for the sake of game optimization. Thank you", 1));
+					add(new Notification('Action Not Allowed..', "We cannot let you return for the sake of game optimization. Thank you", 1, camAchievement, 1));
+					FlxG.sound.play(Paths.sound('notificacion-1'));
+				}
+				if (ClientPrefs.data.language == 'Portuguese') {
+					add(new Notification('Atualmente não disponível!', "Não podemos permitir que você retorne para otimizar o jogo. Obrigado", 1, camAchievement, 1));
+					FlxG.sound.play(Paths.sound('notificacion-1'));
+				}
+			}
+
+			if (Nit == true) {
+				if (FlxG.mouse.justPressed || FlxG.mouse.justPressedMiddle) {
+						if (optionShit[curSelected] == 'donate')
+						{
+							CoolUtil.browserLoad('https://gamebanana.com/wips/79622');
+						}
+						else
+						{
+							selectedSomethin = true;
+							FlxG.sound.play(Paths.sound('confirmMenu'));
+							FlxG.sound.music.fadeOut(3, 0.3);
+							//FlxTween.tween(menuItems, {alpha: 0}, 1);
+							if (!ClientPrefs.data.noneAnimations) {
+							FlxTween.tween(bgCG, {alpha: 0}, 0.5);
+							FlxTween.tween(versionEngine, {alpha: 0}, 0.5);
+							FlxTween.tween(settingButton, {x: FlxG.width + 40}, 0.5);
+							FlxTween.tween(videoButton, {x: FlxG.width + 40}, 0.5);
+		}
+		
+							menuItems.forEach(function(spr:FlxSprite)
+							{
+								if (curSelected != spr.ID)
+								{
+									if (!ClientPrefs.data.noneAnimations) {
+									FlxTween.tween(spr, {x: -500}, 0.5);
+									FlxTween.tween(spr, {x: -500}, 0.5, {
+										ease: FlxEase.quadOut,
+										onComplete: function(twn:FlxTween)
+										{
+											FlxTween.tween(spr, {x: -500}, 0.5);
+											Nit = false;
+										}
+									});
+								}
+								if (ClientPrefs.data.noneAnimations) {
+									FlxTween.tween(spr, {x: -500}, 0.001);
+									FlxTween.tween(spr, {x: -500}, 0.001, {
+										ease: FlxEase.quadOut,
+										onComplete: function(twn:FlxTween)
+										{
+											FlxTween.tween(spr, {x: -500}, 0.001);
+											Nit = false;
+										}
+									});
+								}
+								}
+								else
+								{
+									if (!ClientPrefs.data.noneAnimations) {
+									new FlxTimer().start(2, function(tmr:FlxTimer) {
+										FlxTween.tween(spr, {x: -500}, 0.7,{
+											onComplete: function(twn:FlxTween)
+											{
+												var daChoice:String = optionShit[curSelected];
+				
+												switch (daChoice)
+												{
+													case 'story_mode':
+														MusicBeatState.switchState(new StoryMenuState());
+													case 'freeplay':
+														MusicBeatState.switchState(new FreeplayState());
+													case 'statistics':
+														MusicBeatState.switchState(new EstadisticsMenuState());
+													case 'links':
+														MusicBeatState.switchState(new LinksState());
+												}
+											}});
+									});
+								}
+								if (ClientPrefs.data.noneAnimations) {
+									new FlxTimer().start(0.8, function(tmr:FlxTimer) {
+										FlxTween.tween(spr, {x: -500}, 0.001,{
+											onComplete: function(twn:FlxTween)
+											{
+												var daChoice:String = optionShit[curSelected];
+				
+												switch (daChoice)
+												{
+													case 'story_mode':
+														MusicBeatState.switchState(new StoryMenuState());
+													case 'freeplay':
+														MusicBeatState.switchState(new FreeplayState());
+													case 'statistics':
+														MusicBeatState.switchState(new EstadisticsMenuState());
+													case 'links':
+														MusicBeatState.switchState(new LinksState());
+												}
+											}});
+									});
+								}
+								}
+							});
+						}
+			}
+		}
 
 		if (Nit == true) {
 			if (controls.ACCEPT)
@@ -393,15 +601,18 @@ class MainMenuState extends MusicBeatState
 					FlxG.sound.play(Paths.sound('confirmMenu'));
 					FlxG.sound.music.fadeOut(3, 0.3);
 					//FlxTween.tween(menuItems, {alpha: 0}, 1);
+					if (!ClientPrefs.data.noneAnimations) {
 					FlxTween.tween(bgCG, {alpha: 0}, 0.5);
 					FlxTween.tween(versionEngine, {alpha: 0}, 0.5);
 					FlxTween.tween(settingButton, {x: FlxG.width + 40}, 0.5);
 					FlxTween.tween(videoButton, {x: FlxG.width + 40}, 0.5);
+}
 
 					menuItems.forEach(function(spr:FlxSprite)
 					{
 						if (curSelected != spr.ID)
 						{
+							if (!ClientPrefs.data.noneAnimations) {
 							FlxTween.tween(spr, {x: -500}, 0.5);
 							FlxTween.tween(spr, {x: -500}, 0.5, {
 								ease: FlxEase.quadOut,
@@ -412,8 +623,21 @@ class MainMenuState extends MusicBeatState
 								}
 							});
 						}
+						if (ClientPrefs.data.noneAnimations) {
+							FlxTween.tween(spr, {x: -500}, 0.001);
+							FlxTween.tween(spr, {x: -500}, 0.001, {
+								ease: FlxEase.quadOut,
+								onComplete: function(twn:FlxTween)
+								{
+									FlxTween.tween(spr, {x: -500}, 0.001);
+									Nit = false;
+								}
+							});
+						}
+						}
 						else
 						{
+							if (!ClientPrefs.data.noneAnimations) {
 							new FlxTimer().start(2, function(tmr:FlxTimer) {
 								FlxTween.tween(spr, {x: -500}, 0.7,{
 									onComplete: function(twn:FlxTween)
@@ -428,17 +652,33 @@ class MainMenuState extends MusicBeatState
 												MusicBeatState.switchState(new FreeplayState());
 											case 'statistics':
 												MusicBeatState.switchState(new EstadisticsMenuState());
-											/*#if MODS_ALLOWED
-											case 'mods':
-												MusicBeatState.switchState(new ModsMenuState());
-											#end
-											case 'awards':
-												MusicBeatState.switchState(new AchievementsMenuState());*/
 											case 'links':
 												MusicBeatState.switchState(new LinksState());
 										}
 									}});
 							});
+						}
+						if (ClientPrefs.data.noneAnimations) {
+							new FlxTimer().start(0.8, function(tmr:FlxTimer) {
+								FlxTween.tween(spr, {x: -500}, 0.001,{
+									onComplete: function(twn:FlxTween)
+									{
+										var daChoice:String = optionShit[curSelected];
+		
+										switch (daChoice)
+										{
+											case 'story_mode':
+												MusicBeatState.switchState(new StoryMenuState());
+											case 'freeplay':
+												MusicBeatState.switchState(new FreeplayState());
+											case 'statistics':
+												MusicBeatState.switchState(new EstadisticsMenuState());
+											case 'links':
+												MusicBeatState.switchState(new LinksState());
+										}
+									}});
+							});
+						}
 						}
 					});
 				}
@@ -459,21 +699,17 @@ class MainMenuState extends MusicBeatState
 					openSubState(new Prompt('Esta acción no esta permitida actualmente por el Admin.\n\nPide Permisos', 0, function() {
 					},
 					null, ignoreWarnings));
-				//add(new Notification(camAchievement, "No Disponible Actualmente!", "Lastimosamente no se encuentra esta opcion habilitada en la V" + endingcorruptionVersion, 1));
 			}
 			if (ClientPrefs.data.language == 'Inglish') {
 				openSubState(new Prompt('This action is not currently allowed by the Admin.\n\nRequest Permissions', 0, function() {
 				},
 				null, ignoreWarnings));
-				//add(new Notification(camAchievement, "Not Currently Available!", "Unfortunately this option is not enabled in the V" + endingcorruptionVersion, 1));
 			}
 			if (ClientPrefs.data.language == 'Portuguese') {
 				openSubState(new Prompt('Esta ação não é permitida atualmente pelo administrador.\n\nSolicitar permissões', 0, function() {
 				},
 				null, ignoreWarnings));
-				//add(new Notification(camAchievement, "Atualmente não disponível!", "Infelizmente esta opção não está habilitada no V" + endingcorruptionVersion, 1));
 			}
-			//add(new Notification(camAchievement, "No Disponible Actualmente!", "Lastimosamente no se encuentra esta opcion habilitada en la V" + endingcorruptionVersion, false));
 			}
 		}
 			#end

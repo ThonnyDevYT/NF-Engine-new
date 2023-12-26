@@ -27,7 +27,7 @@ class Prompt extends MusicBeatSubstate
 	var buttonAccept:FlxButton;
 	var buttonNo:FlxButton;
 	var cornerSize:Int = 10;
-	public function new(promptText:String='', defaultSelected:Int = 0, okCallback:Void->Void, cancelCallback:Void->Void,acceptOnDefault:Bool=false,option1:String=null,option2:String=null) 
+	public function new(promptText:String='', defaultSelected:Int = 0, okCallback:Void->Void,cancelCallback:Void->Void,acceptOnDefault:Bool=false,option1:String=null,option2:String=null) 
 	{
 		selected = defaultSelected;
 		okc = okCallback;
@@ -36,7 +36,7 @@ class Prompt extends MusicBeatSubstate
 		goAnyway = acceptOnDefault;
 		
 		var op1 = 'OK';
-		var op2 = 'CANCEL';
+		var op2 = 'ATRAS';
 		
 		if (option1 != null) op1 = option1;
 		if (option2 != null) op2 = option2;
@@ -59,7 +59,7 @@ class Prompt extends MusicBeatSubstate
 		}else{
 		panel = new FlxSprite(0, 0);
 		panelbg = new FlxSprite(0, 0);
-		makeSelectorGraphic(panel,300,150,0xff999999);
+		makeSelectorGraphic(panel,300,150,0xffbebebe);
 		makeSelectorGraphic(panelbg,304,154,0xff000000);
 		//panel.makeGraphic(300, 150, 0xff999999);
 		//panel.loadGraphic(Paths.image('ui/promptbg'));
@@ -80,7 +80,7 @@ class Prompt extends MusicBeatSubstate
 		add(buttonNo);
 		//add(buttons);
 		var textshit:FlxText = new FlxText(buttonNo.width*2, panel.y, 300, theText, 16);
-		textshit.alignment = 'center';
+		textshit.setFormat("", 16, FlxColor.BLACK, CENTER);
 		add(textshit);
 		textshit.screenCenter();
 		buttonAccept.screenCenter();

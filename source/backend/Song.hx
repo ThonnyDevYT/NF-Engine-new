@@ -1,15 +1,14 @@
 package backend;
 
 import tjson.TJSON as Json;
+import lime.utils.Assets;
 
-#if MODS_ALLOWED
+#if sys
 import sys.io.File;
 import sys.FileSystem;
 #end
 
 import backend.Section;
-
-import lime.utils.Assets;
 
 typedef SwagSong =
 {
@@ -18,7 +17,14 @@ typedef SwagSong =
 	var events:Array<Dynamic>;
 	var bpm:Float;
 	var needsVoices:Bool;
+	var mision1:Bool;
+	var mision2:Bool;
+	var mision3:Bool;
+	var mision4:Bool;
+	var mision5:Bool;
 	var speed:Float;
+	var BGFreeplay:String;
+
 	var player1:String;
 	var player2:String;
 	var gfVersion:String;
@@ -28,7 +34,7 @@ typedef SwagSong =
 	@:optional var gameOverSound:String;
 	@:optional var gameOverLoop:String;
 	@:optional var gameOverEnd:String;
-
+	
 	@:optional var disableNoteRGB:Bool;
 
 	@:optional var arrowSkin:String;
@@ -49,9 +55,14 @@ class Song
 	public var gameOverLoop:String;
 	public var gameOverEnd:String;
 	public var disableNoteRGB:Bool = false;
+	public var mision1:Bool;
+	public var mision2:Bool;
+	public var mision3:Bool;
+	public var mision4:Bool;
+	public var mision5:Bool;
+	public var BGFreeplay:String = '';
 	public var speed:Float = 1;
 	public var stage:String;
-
 	public var player1:String = 'bf';
 	public var player2:String = 'dad';
 	public var gfVersion:String = 'gf';
@@ -98,7 +109,7 @@ class Song
 
 	public static function loadFromJson(jsonInput:String, ?folder:String):SwagSong
 	{
-		var rawJson:String = null;
+		var rawJson = null;
 		
 		var formattedFolder:String = Paths.formatToSongPath(folder);
 		var formattedSong:String = Paths.formatToSongPath(jsonInput);
@@ -110,8 +121,8 @@ class Song
 		#end
 
 		if(rawJson == null) {
-			#if MODS_ALLOWED
-			rawJson = File.getContent(SUtil.getPath() + Paths.json(formattedFolder + '/' + formattedSong)).trim();
+			#if sys
+			rawJson = File.getContent(Paths.json(formattedFolder + '/' + formattedSong)).trim();
 			#else
 			rawJson = Assets.getText(Paths.json(formattedFolder + '/' + formattedSong)).trim();
 			#end
@@ -139,12 +150,14 @@ class Song
 				daSong = songData.song;
 				daBpm = songData.bpm; */
 
-		var songJson:Dynamic = parseJson(rawJson);
+		var songJson:Dynamic = parseJSONshit(rawJson);
 		if(jsonInput != 'events') StageData.loadDirectory(songJson);
 		onLoadJson(songJson);
 		return songJson;
 	}
 
-	public static function parseJson(rawJson:String):SwagSong
+	public static function parseJSONshit(rawJson:String):SwagSong
+	{
 		return cast Json.parse(rawJson).song;
+	}
 }

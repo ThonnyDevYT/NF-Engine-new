@@ -13,6 +13,8 @@ class NewOptions extends BaseOptionsMenu
             title = 'New Options !Only Inglish!';
             rpcTitle = 'In th options New !Only Inglish!'; //for Discord
 
+            MusicBeatState.updatestate("New Options (!Only Inglish!)");
+
             //Here is for Options
             var option:Option = new Option('Recording Optimization',
             'Optimize all game fragments so that the recorder does not stop due to errors',

@@ -14,6 +14,7 @@ class OptionsState extends MusicBeatState
 		'Adjust',
 		'Graphics',
 		'Visuals UI',
+		'Optimizations',
 		'Gameplay',
 		'NewOptions',
 		#if DEMO_MODE
@@ -50,10 +51,16 @@ class OptionsState extends MusicBeatState
 
 	function openSelectedSubstate(label:String) {
 		switch(label) {
+			case 'Note Colors':
+				openSubState(new options.NotesSubState());
+			/*case 'Controls':
+				openSubState(new options.ControlsSubState());*/
 			case 'Graphics':
 				openSubState(new options.GraphicsSettingsSubState());
 			case 'Visuals UI':
 				openSubState(new options.VisualsUISubState());
+			case 'Optimizations':
+				openSubState(new options.OptimizationsSubState());
 			case 'Gameplay':
 				openSubState(new options.GameplaySettingsSubState());
 			case 'Debug Config':
@@ -91,7 +98,7 @@ class OptionsState extends MusicBeatState
 		bg.screenCenter();
 		add(bg);
 
-		//Viñeta
+		//vineta
 		vineta = new FlxSprite(0, 0).loadGraphic(Paths.image('Vineta'));
 		vineta.antialiasing = ClientPrefs.data.antialiasing;
 		vineta.width = FlxG.width;
@@ -132,11 +139,11 @@ class OptionsState extends MusicBeatState
 		selectorRight = new Alphabet(0, 0, '<]', true);
 		add(selectorRight);
 
-		controlsButton = new FlxButton(FlxG.width - 100, FlxG.height - 400, "", onClickControls);
+		controlsButton = new FlxButton(FlxG.width - 100, FlxG.height - 100, "", onClickControls);
 		controlsButton.loadGraphicFromSprite(controlsIcon);
 		controlsButton.scrollFactor.set();
 
-		reloadButton = new FlxButton(FlxG.width - 100, FlxG.height - 500, "", onClickReload);
+		reloadButton = new FlxButton(FlxG.width - 100, FlxG.height - 200, "", onClickReload);
 		reloadButton.loadGraphicFromSprite(reloadIcon);
 		reloadButton.scrollFactor.set();
 
@@ -153,17 +160,16 @@ class OptionsState extends MusicBeatState
 			add(reloadButton);
 
 
-			#if android
-			addVirtualPad(UP_DOWN, A_B);
-			#end
 		TimerEffectvineta = new FlxTimer();
 		TimerEffectvineta.start(6, onEffectvineta, 0);
+
+		MusicBeatState.updatestate('Options Menu');
 
 		super.create();
 	}
 
 	public function onClickControls() {
-		MusicBeatState.switchState(new android.AndroidControlsMenu());
+		openSubState(new options.ControlsSubState());
 	}
 
 	public function onClickReload() {
@@ -171,26 +177,23 @@ class OptionsState extends MusicBeatState
 		ClientPrefs.saveSettings();
 		MusicBeatState.switchState(new options.OptionsState());
 
-		#if desktop
 		FlxG.resizeWindow(ClientPrefs.data.width, ClientPrefs.data.height);
-		#end
 
 		trace('Se Forzo la Carga de los ajustes!!');
 	}
 
 	override function closeSubState() {
 		super.closeSubState();
-		changeSelection();
-		#if android addVirtualPad(UP_DOWN, A_B); #end
 		ClientPrefs.saveSettings();
 	}
 
 	override function update(elapsed:Float) {
+		super.update(elapsed);
 
-		if (MusicBeatState._virtualpad.buttonUp.pressed == true) {
+		if (controls.UI_UP_P) {
 			changeSelection(-1);
 		}
-		if (MusicBeatState._virtualpad.buttonDown.pressed == true) {
+		if (controls.UI_DOWN_P) {
 			changeSelection(1);
 		}
 
@@ -223,13 +226,8 @@ class OptionsState extends MusicBeatState
 		}
 		
 		if (controls.ACCEPT){
-			#if android
-			removeVirtualPad();
-			#end
 			openSelectedSubstate(options[curSelected]);
 		}
-
-		super.update(elapsed);
 	}
 	
 	function changeSelection(change:Int = 0) {

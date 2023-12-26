@@ -40,6 +40,35 @@ class Spooky extends BaseStage
 
 	var lightningStrikeBeat:Int = 0;
 	var lightningOffset:Int = 8;
+
+	override function eventCalled(eventName:String, value1:String, value2:String, flValue1:Null<Float>, flValue2:Null<Float>, strumTime:Float)
+		{
+			switch(eventName)
+			{
+				case "BG Alpha":
+					if (halloweenBG.alpha == 1) {
+						halloweenBG.alpha = 0;
+					}
+					if (halloweenBG.alpha == 0) {
+						halloweenBG.alpha = 1;
+					}
+			}
+		}
+		override function eventPushed(event:objects.Note.EventNote)
+		{
+			// used for preloading assets used on events
+			switch(event.event)
+			{
+				case "BG Alpha":
+					if (halloweenBG.alpha == 1) {
+						halloweenBG.alpha = 0;
+					}
+					if (halloweenBG.alpha == 0) {
+						halloweenBG.alpha = 1;
+					}	
+			}
+		}
+
 	override function beatHit()
 	{
 		if (FlxG.random.bool(10) && curBeat > lightningStrikeBeat + lightningOffset)

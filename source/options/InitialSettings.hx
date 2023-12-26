@@ -16,6 +16,8 @@ class InitialSettings extends BaseOptionsMenu
             title = 'Initial Settings';
             rpcTitle = 'Initial Settings Menu'; //for Discord Rich Presence
 
+            MusicBeatState.updatestate("Initial Settings");
+
           /*  boyfriend = new Character(840, 170, 'bf', true);
             boyfriend.setGraphicSize(Std.int(boyfriend.width * 0.75));
             boyfriend.updateHitbox();

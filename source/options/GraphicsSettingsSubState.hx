@@ -16,6 +16,8 @@ class GraphicsSettingsSubState extends BaseOptionsMenu
 		boyfriend.animation.finishCallback = function (name:String) boyfriend.dance();
 		boyfriend.visible = false;
 
+		MusicBeatState.updatestate("Graphics Settings");
+
 		if (ClientPrefs.data.language == 'Inglish') {
 		title = 'Graphics';
 		rpcTitle = 'Graphics Settings Menu'; //for Discord Rich Presence

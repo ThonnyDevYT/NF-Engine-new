@@ -5,7 +5,7 @@ import haxe.Timer;
 import openfl.events.Event;
 import openfl.text.TextField;
 import openfl.text.TextFormat;
-import backend.Controls;
+import flixel.input.FlxKeyManager;
 #if gl_stats
 import openfl.display._internal.stats.Context3DStats;
 import openfl.display._internal.stats.DrawCallContext;
@@ -26,13 +26,12 @@ import openfl.system.System;
 @:fileXml('tags="haxe,release"')
 @:noDebug
 #end
-class MEMORY extends TextField
+class COINS extends TextField
 {
 	/**
 		The current frame rate, expressed using frames-per-second
 	**/
 	public var currentFPS(default, null):Int;
-	public static var fullMemory:Float = 0;
 
 	@:noCompletion private var cacheCount:Int;
 	@:noCompletion private var currentTime:Float;
@@ -73,10 +72,6 @@ class MEMORY extends TextField
 		currentTime += deltaTime;
 		times.push(currentTime);
 
-        if(FlxG.mouse.justPressed || FlxG.mouse.justPressedRight || FlxG.mouse.justPressedMiddle) {
-			FlxG.sound.play(Paths.sound('click'), 1);
-        }
-
 		if (PlayState.stageUI == "pixel") {
 			defaultTextFormat = new TextFormat("pixel.otf", 8);
 		}
@@ -90,21 +85,24 @@ class MEMORY extends TextField
 		}
 
 		var currentCount = times.length;
+		var coins:Int = ClientPrefs.data.coins;
 
-			var memoryMegas:Float = 0;
+			if (ClientPrefs.data.language == 'Inglish') text = "\n[" + coins + "] POINTS";
 
-			#if openfl
-			fullMemory = Math.abs(FlxMath.roundDecimal(System.totalMemory, 1));
-			memoryMegas = Math.abs(FlxMath.roundDecimal(System.totalMemory / 1000000, 1));
-			if (ClientPrefs.data.moredebug == false) text = "              [" + memoryMegas + "]MBs";
+			if (ClientPrefs.data.language == 'Spanish') text = "\n[" + coins + "] PUNTOS";
 
-			if (ClientPrefs.data.moredebug == true) text = "              [" + memoryMegas + "]MBs  [" + ClientPrefs.data.width + "] x [" + ClientPrefs.data.height + "] [" + FlxG.random.float(0.00001, 67535674) + "] KBs";
-			#end
+			if (ClientPrefs.data.language == 'Portuguese') text = "\n[" + coins + "] PONTOS";
 
 			textColor = 0xFFFFFFFF;
-			if (memoryMegas > 3000)
+			if (coins < 50)
 			{
-				textColor = 0xFFFF0000;
+				textColor = 0xFF900000;
+			}
+			if (coins < 0) {
+				ClientPrefs.data.coins = 0;
+			}
+			if (coins > 50) {
+				textColor = 0x948A00;
 			}
 
 			#if (gl_stats && !disable_cffi && (!html5 || !canvas))
@@ -112,8 +110,6 @@ class MEMORY extends TextField
 			text += "\nstageDC: " + Context3DStats.contextDrawCalls(DrawCallContext.STAGE);
 			text += "\nstage3DDC: " + Context3DStats.contextDrawCalls(DrawCallContext.STAGE3D);
 			#end
-
-			text += "\n";
 
 		cacheCount = currentCount;
 	}

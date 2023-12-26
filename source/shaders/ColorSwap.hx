@@ -14,13 +14,13 @@ class ColorSwap {
 		return hue;
 	}
 
-	private function set_saturation(value:Float) {
+	public function set_saturation(value:Float) {
 		saturation = value;
 		shader.uTime.value[1] = saturation;
 		return saturation;
 	}
 
-	private function set_brightness(value:Float) {
+	public function set_brightness(value:Float) {
 		brightness = value;
 		shader.uTime.value[2] = brightness;
 		return brightness;
@@ -30,6 +30,8 @@ class ColorSwap {
 	{
 		shader.uTime.value = [0, 0, 0];
 		shader.awesomeOutline.value = [false];
+
+		set_saturation(20);
 	}
 }
 

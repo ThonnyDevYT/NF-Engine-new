@@ -44,6 +44,8 @@ class LinksState extends MusicBeatState
 		DiscordClient.changePresence("In the Menus", null);
 		#end
 
+		MusicBeatState.updatestate("Links Menu");
+
 		persistentUpdate = true;
 		bg = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
 		bg.antialiasing = ClientPrefs.data.antialiasing;
@@ -68,9 +70,13 @@ class LinksState extends MusicBeatState
 		var defaultList:Array<Array<String>> = [ //Name - Icon name - Description - Link - BG Color - WebName
 			['Ending Corruption\nCreator - ThonnyDev'],
 			['Canal De Youtube',	'youtube',		'Youtube.com/@ThonnyDev',	'https://www.youtube.com/channel/UCIjku6e7Fsuh9szD5QUDI8A',	'5EFF0000', 'Youtube.com'],
-			['GameBanana',			'gamebanana',		'Gamebana.com/wips/EndingCorruption', 'https://gamebanana.com/wips/79622', '5EFFE100', 'Gamebanana.com'],
+			['Itch.io',				'itch',			'Thonnydevyt.itch.io/endingcorruption', 'https://thonnydevyt.itch.io/endingcorruption', 'f54272',	'Itch.io'],
+			['GitHub',				'github',		'Github.com/ThonnyDevYT',				'https://github.com/ThonnyDevYT',				'8c8c8c',	'GitHub.com'],
+			['GameBanana',			'gamebanana',	'Gamebana.com/wips/EndingCorruption', 'https://gamebanana.com/wips/79622', '5EFFE100', 'Gamebanana.com'],
 			['Gamejolt',			'gamejolt',		'Gamejolt.com/games/EndingCorruptionDemo', 'https://gamejolt.com/games/EndingCorruptionDemo/845799', '5E00FF00', 'Gamejolt.com'],
-			['Discord',				'discord',		'discord.gg/UPYsecaNQC',					'https://discord.gg/UPYsecaNQC',				'5E00A6FF',		'discord.gg']
+			['Discord',				'discord',		'discord.gg/UPYsecaNQC',					'https://discord.gg/UPYsecaNQC',				'5E00A6FF',		'discord.gg'],
+			['Assistant - CamelyGamer'],
+			['Discord',				'discord',		'camelygamer_44692', 						'https://discord.com/channels/@me',				'0070cc',		'discord.gg']
 		];
 		
 		for(i in defaultList) {
@@ -133,10 +139,6 @@ class LinksState extends MusicBeatState
 
 		time = new FlxTimer();
 		time.start(12, onAlpha, 0);
-
-		#if android
-		addVirtualPad(UP_DOWN, A_B);
-		#end
 
 		super.create();
 	}

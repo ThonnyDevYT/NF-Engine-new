@@ -1,5 +1,6 @@
 package states;
 
+import objects.HealthBar;
 import lime.app.Promise;
 import lime.app.Future;
 
@@ -9,6 +10,9 @@ import openfl.utils.Assets;
 import lime.utils.Assets as LimeAssets;
 import lime.utils.AssetLibrary;
 import lime.utils.AssetManifest;
+import flixel.util.FlxTimer;
+
+import objects.HealthBar;
 
 import backend.StageData;
 
@@ -30,6 +34,18 @@ class LoadingState extends MusicBeatState
 	var callbacks:MultiCallback;
 	var targetShit:Float = 0;
 
+	var curT:Array<String> = [];
+
+	var progress:Float = 0;
+
+	var Time:FlxTimer;
+
+	public static var loading:FlxText;
+	public static var timi:FlxTimer;
+	public static var consejo:FlxText;
+
+	public static var pixel:Bool = false;
+
 	function new(target:FlxState, stopMusic:Bool, directory:String)
 	{
 		super();
@@ -38,24 +54,36 @@ class LoadingState extends MusicBeatState
 		this.directory = directory;
 	}
 
-	var funkay:FlxSprite;
-	var loadBar:FlxSprite;
+	public function onLoader(Timer:FlxTimer) {
+		onLoad();
+	}
+
+
+	var Barload:FlxText;
 	override function create()
 	{
-		var bg:FlxSprite = new FlxSprite(0, 0).makeGraphic(FlxG.width, FlxG.height, 0xffcaff4d);
-		bg.antialiasing = ClientPrefs.data.antialiasing;
-		add(bg);
-		funkay = new FlxSprite(0, 0).loadGraphic(Paths.getPath('images/funkay.png', IMAGE));
-		funkay.setGraphicSize(0, FlxG.height);
-		funkay.updateHitbox();
-		add(funkay);
-		funkay.antialiasing = ClientPrefs.data.antialiasing;
-		funkay.scrollFactor.set();
-		funkay.screenCenter();
-
-		loadBar = new FlxSprite(0, FlxG.height - 20).makeGraphic(FlxG.width, 10, 0xffff16d2);
-		loadBar.screenCenter(X);
-		add(loadBar);
+			if (ClientPrefs.data.language == 'Inglish') {
+				 loading = new FlxText(0, 0, 0, "Loading", 60);
+				 MusicBeatState.updatestate("Loading");
+			}
+	
+			if (ClientPrefs.data.language == 'Spanish') { 
+				loading = new FlxText(0, 0, 0, "Cargando", 60);
+				MusicBeatState.updatestate("Cargando");
+			}
+	
+			if (ClientPrefs.data.language == 'Portuguese')  {
+				loading = new FlxText(0, 0, 0, "Carregando", 60);
+				MusicBeatState.updatestate("Carregando");
+			}
+			if (pixel == false) {
+			loading.setFormat("", 60, FlxColor.WHITE, RIGHT);
+			}
+			if (pixel == true) {
+			loading.setFormat("pixel.otf", 45, FlxColor.WHITE, RIGHT);
+			}
+			loading.antialiasing = ClientPrefs.data.antialiasing;
+			add(loading);
 		
 		initSongsManifest().onComplete
 		(
@@ -78,6 +106,9 @@ class LoadingState extends MusicBeatState
 				new FlxTimer().start(fadeTime + MIN_TIME, function(_) introComplete());
 			}
 		);
+
+		timi = new FlxTimer();
+		timi.start(0.1, onLoader, 1);
 	}
 	
 	function checkLoadSong(path:String)
@@ -111,18 +142,13 @@ class LoadingState extends MusicBeatState
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
-		funkay.setGraphicSize(Std.int(0.88 * FlxG.width + 0.9 * (funkay.width - 0.88 * FlxG.width)));
-		funkay.updateHitbox();
-		if(controls.ACCEPT)
-		{
-			funkay.setGraphicSize(Std.int(funkay.width + 60));
-			funkay.updateHitbox();
-		}
 
 		if(callbacks != null) {
 			targetShit = FlxMath.remapToRange(callbacks.numRemaining / callbacks.length, 1, 0, 0, 1);
-			loadBar.scale.x += 0.5 * (targetShit - loadBar.scale.x);
 		}
+
+		loading.x = FlxG.width - loading.width;
+		loading.y = FlxG.height - loading.height;
 	}
 	
 	function onLoad()
@@ -130,7 +156,7 @@ class LoadingState extends MusicBeatState
 		if (stopMusic && FlxG.sound.music != null)
 			FlxG.sound.music.stop();
 		
-		MusicBeatState.switchState(target);
+		MusicBeatState.nullswitchState(target);
 	}
 	
 	static function getSongPath()
@@ -145,7 +171,7 @@ class LoadingState extends MusicBeatState
 	
 	inline static public function loadAndSwitchState(target:FlxState, stopMusic = false)
 	{
-		MusicBeatState.switchState(getNextState(target, stopMusic));
+		MusicBeatState.nullswitchState(getNextState(target, stopMusic));
 	}
 	
 	static function getNextState(target:FlxState, stopMusic = false):FlxState
@@ -159,22 +185,22 @@ class LoadingState extends MusicBeatState
 		Paths.setCurrentLevel(directory);
 		trace('Setting asset folder to ' + directory);
 
-		#if NO_PRELOAD_ALL
+
 		var loaded:Bool = false;
 		if (PlayState.SONG != null) {
 			loaded = isSoundLoaded(getSongPath()) && (!PlayState.SONG.needsVoices || isSoundLoaded(getVocalPath())) && isLibraryLoaded("shared") && isLibraryLoaded('week_assets');
 		}
 		
-		if (!loaded)
+		if (!loaded) {
 			return new LoadingState(target, stopMusic, directory);
-		#end
+		}
+
 		if (stopMusic && FlxG.sound.music != null)
 			FlxG.sound.music.stop();
 		
 		return target;
 	}
 	
-	#if NO_PRELOAD_ALL
 	static function isSoundLoaded(path:String):Bool
 	{
 		trace(path);
@@ -185,7 +211,6 @@ class LoadingState extends MusicBeatState
 	{
 		return Assets.getLibrary(library) != null;
 	}
-	#end
 	
 	override function destroy()
 	{

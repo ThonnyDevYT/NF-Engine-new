@@ -11,17 +11,24 @@ import states.PlayState;
 class EstadisticsMenuState extends MusicBeatState {
 
     var BaseText:FlxText;
+    var note:String = '\n\n\n\n\n\n\n\n\n\n\n\n\n\n';
+    var Notetext:FlxText;
 
     override function create() {
         super.create();
+
+        MusicBeatState.updatestate("Stadistics Menu");
 
         var bg:FlxSprite = new FlxSprite().makeGraphic(0, 0, FlxColor.BLACK);
         add(bg);
 
         if (ClientPrefs.data.language == 'Spanish') {
         BaseText = new FlxText(0, 0, FlxG.width,
-           'Estadisticas: \n\nNotas Presionadas: ' + PlayState.hitnotesong + ' Notas\n\nNotas Falladas: ' + PlayState.missNotesong + ' Fallas\n\nMuertes: ' + PlayState.deaths + ' Muertes\n\nPuntaje Total: ' + PlayState.scoresTotal + ' Puntos',
+           'Estadisticas: \n\nNotas Presionadas: ' + PlayState.hitnotesong + ' Notas\n\nNotas Falladas: ' + PlayState.missNotesong + ' Fallas\n\nMuertes: ' + PlayState.deaths + ' Muertes\n\nPuntaje Total: ' + PlayState.scoresTotal + ' Puntos\n\nPUNTOS: ' + PlayState.pointsWin + ' puntos',
             32);
+        Notetext = new FlxText(0, 0, FlxG.width,
+            note + '!!ESTAS ESTADISTICAS SON TEMPORABLES!!\nLAS ESTADISTICAS SE REINICIAN AL SALIR',
+        32);
         }
         if (ClientPrefs.data.language == 'Inglish') {
             BaseText = new FlxText(0, 0, FlxG.width,
@@ -37,9 +44,9 @@ class EstadisticsMenuState extends MusicBeatState {
         BaseText.screenCenter();
         add(BaseText);
 
-        #if android
-        addVirtualPad(NONE, B);
-        #end
+        Notetext.setFormat("nullFont.ttf", 32, FlxColor.RED, CENTER, OUTLINE_FAST, FlxColor.BLACK);
+        Notetext.screenCenter();
+        add(Notetext);
     }
 
     override function update(elapsed:Float) {

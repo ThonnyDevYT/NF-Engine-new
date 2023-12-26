@@ -29,6 +29,8 @@ class Limo extends BaseStage
 	var changespeed:FlxTimer;
 
 	var skyBG:BGSprite;
+	var skyBG20:BGSprite;
+	var skyBG30:BGSprite;
 	var limo:BGSprite;
 	var skyBG2:BGSprite;
 	var limo2:BGSprite;
@@ -36,13 +38,13 @@ class Limo extends BaseStage
 
 	public function onMovimentspeed(Timer:FlxTimer)
 		{
-			FlxTween.tween(bgLimo, {x: bgLimo.x - 120}, 3, {
+			FlxTween.tween(bgLimo, {x: bgLimo.x - 120}, 5, {
 				onComplete: function (twn:FlxTween) {
-					FlxTween.tween(bgLimo, {x: bgLimo.x + 120}, 3, {
+					FlxTween.tween(bgLimo, {x: bgLimo.x + 120}, 5, {
 						onComplete: function (twn:FlxTween) {
-							FlxTween.tween(bgLimo, {x: bgLimo.x + 120}, 3, {
+							FlxTween.tween(bgLimo, {x: bgLimo.x + 120}, 5, {
 								onComplete: function (twn:FlxTween) {
-									FlxTween.tween(bgLimo, {x: bgLimo.x - 120}, 3);
+									FlxTween.tween(bgLimo, {x: bgLimo.x - 120}, 5);
 								}
 							});
 						}
@@ -55,6 +57,12 @@ class Limo extends BaseStage
 	{
 		skyBG = new BGSprite('limo/limoSunset', -120, -50, 0.1, 0.1);
 		add(skyBG);
+
+		skyBG20 = new BGSprite('limo/limoSunset', skyBG.x - skyBG.width, -50, 0.1, 0.1);
+		add(skyBG20);
+
+		skyBG30 = new BGSprite('limo/limoSunset', skyBG.x + skyBG.width, -50, 0.1, 0.1);
+		add(skyBG30);
 
 		if(!ClientPrefs.data.lowQuality) {
 			limoMetalPole = new BGSprite('gore/metalPole', -500, 220, 0.4, 0.4);
@@ -110,16 +118,17 @@ class Limo extends BaseStage
 		//fastCar.active = true;
 
 		changespeed = new FlxTimer();
-		changespeed.start(12, onMovimentspeed, 0);
+		changespeed.start(20, onMovimentspeed, 0);
+		onMovimentspeed(changespeed);
 	}
 	override function createPost()
 	{
 		//resetFastCar();
 		//addBehindGF(fastCar);
 		
-		limo = new BGSprite('limo/limoDrive', -120, 550, 1, 1, ['Limo stage'], true);
+		limo = new BGSprite('limo/limoDrive', -120, 550, 1, 1, ['Limo stage'], true, 55);
 		addBehindGF(limo); //Shitty layering but whatev it works LOL
-		limo2 = new BGSprite('limo/limoDrive-2', -120, 550, 1, 1, ['Limo stage'], true);
+		limo2 = new BGSprite('limo/limoDrive-2', -120, 550, 1, 1, ['Limo stage'], true, 55);
 		//limo2.visible = false;
 		limo2.alpha = 0;
 		addBehindGF(limo2);
@@ -129,6 +138,16 @@ class Limo extends BaseStage
 
 	override function update(elapsed:Float)
 	{
+
+		skyBG.x += FlxG.random.int(15, 75);
+        skyBG20.x = skyBG.x - skyBG.width;
+		skyBG30.x = skyBG.x + skyBG.width;
+
+		if (skyBG.x + skyBG.width > FlxG.width + skyBG.width)
+			{
+				skyBG.x -= skyBG.width;
+			}
+
 		if(!ClientPrefs.data.lowQuality) {
 			grpLimoParticles.forEach(function(spr:BGSprite) {
 				if(spr.animation.curAnim.finished) {

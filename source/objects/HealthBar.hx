@@ -67,16 +67,16 @@ class HealthBar extends FlxSpriteGroup
 
 	public function setColors(left:FlxColor, right:FlxColor)
 	{
-		leftBar.color = left;
-		rightBar.color = right;
+		FlxTween.color(leftBar, 8, FlxColor.BLACK, FlxColor.GREEN);
+		FlxTween.color(rightBar, 8, FlxColor.BLACK, FlxColor.BLACK);
 	}
 
 	public function updateBar()
 	{
 		if(leftBar == null || rightBar == null) return;
-
-		leftBar.setPosition(bg.x, bg.y);
-		rightBar.setPosition(bg.x, bg.y);
+		
+		FlxTween.tween(leftBar, {x: bg.x, y: bg.y}, 1);
+		FlxTween.tween(rightBar, {x: bg.x, y: bg.y}, 1);
 
 		var leftSize:Float = 0;
 		if(leftToRight) leftSize = FlxMath.lerp(0, barWidth, percent / 100);

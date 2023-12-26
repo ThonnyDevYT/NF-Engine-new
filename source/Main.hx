@@ -1,17 +1,28 @@
 package;
 
 import flixel.graphics.FlxGraphic;
+
 import flixel.FlxGame;
 import flixel.FlxState;
 import openfl.Assets;
 import openfl.Lib;
 import openfl.display.FPS;
+import openfl.display.MEMORY;
+import openfl.display.COINS;
 import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.display.StageScaleMode;
 import lime.app.Application;
 import states.TitleState;
-//import objects.FPSBG;
+
+#if linux
+import lime.graphics.Image;
+#end
+
+#if windows
+import openfl.system.System;
+#end
+
 //crash handler stuff
 #if CRASH_HANDLER
 import openfl.events.UncaughtErrorEvent;
@@ -22,11 +33,11 @@ import sys.io.File;
 import sys.io.Process;
 #end
 
-import flixel.FlxSprite;
-import flixel.FlxObject;
-
 #if linux
-import lime.graphics.Image;
+@:cppInclude('./external/gamemode_client.h')
+@:cppFileCode('
+	#define GAMEMODE_AUTO
+')
 #end
 
 class Main extends Sprite
@@ -42,7 +53,9 @@ class Main extends Sprite
 	};
 
 	public static var fpsVar:FPS;
-	public static var fpsBG:Sprite;
+	public static var memoryVar:MEMORY;
+	public static var coinVar:COINS;
+
 	// You can pretty much ignore everything from here on - your code should go in your states.
 
 	public static function main():Void
@@ -54,7 +67,6 @@ class Main extends Sprite
 	{
 		super();
 
-    SUtil.gameCrashCheck();
 		if (stage != null)
 		{
 			init();
@@ -88,30 +100,49 @@ class Main extends Sprite
 			game.width = Math.ceil(stageWidth / game.zoom);
 			game.height = Math.ceil(stageHeight / game.zoom);
 		}
-	    SUtil.doTheCheck();
-
+	
 		#if LUA_ALLOWED Lua.set_callbacks_function(cpp.Callable.fromStaticFunction(psychlua.CallbackHandler.call)); #end
 		Controls.instance = new Controls();
 		ClientPrefs.loadDefaultKeys();
-	
-		#if mobile
-		addChild(new FlxGame(1280, 720, TitleState, 60, 60, true, false));
-		#else
+		#if ACHIEVEMENTS_ALLOWED Achievements.load(); #end
 		addChild(new FlxGame(game.width, game.height, game.initialState, #if (flixel < "5.0.0") game.zoom, #end game.framerate, game.framerate, game.skipSplash, game.startFullscreen));
-		#end
 
-	
-		fpsVar = new FPS(5, 5, 0xFFFFFF);
+		#if !mobile
+		if (ClientPrefs.data.noneAnimations) {
+		coinVar = new COINS(10, 3, 0xFFFFFF);
+		addChild(coinVar);
+		memoryVar = new MEMORY(10, 3, 0xFFFFFF);
+		addChild(memoryVar);
+		fpsVar = new FPS(10, 3, 0xFFFFFF);
 		addChild(fpsVar);
-		if(fpsVar != null) {
-			fpsVar.visible = ClientPrefs.data.showFPS;
-		}
-	    
-	    
-		
 		Lib.current.stage.align = "tl";
 		Lib.current.stage.scaleMode = StageScaleMode.NO_SCALE;
-		
+		} else {
+		coinVar = new COINS(-60, 3, 0xFFFFFF);
+		coinVar.alpha = 0;
+		addChild(coinVar);
+		memoryVar = new MEMORY(-60, 3, 0xFFFFFF);
+		memoryVar.alpha = 0;
+		addChild(memoryVar);
+		fpsVar = new FPS(-60, 3, 0xFFFFFF);
+		fpsVar.alpha = 0;
+		addChild(fpsVar);
+		Lib.current.stage.align = "tl";
+		Lib.current.stage.scaleMode = StageScaleMode.NO_SCALE;
+		}
+		#end
+
+		#if desktop
+		backend.MusicBeatState.updatestate("TitleMenu", ClientPrefs.data.language);
+		#end
+
+		if (ClientPrefs.data.width == 1280 && ClientPrefs.data.height == 720) {
+		FlxG.fullscreen = ClientPrefs.data.fullyscreen;
+		}
+		if (ClientPrefs.data.width != 1280 && ClientPrefs.data.height != 720) {
+			FlxG.resizeWindow(ClientPrefs.data.width, ClientPrefs.data.height);
+		}
+
 		#if linux
 		var icon = Image.fromFile("icon.png");
 		Lib.current.stage.window.setIcon(icon);
@@ -165,7 +196,7 @@ class Main extends Sprite
 		dateNow = dateNow.replace(" ", "_");
 		dateNow = dateNow.replace(":", "'");
 
-		path = "./crash/" + "PsychEngine_" + dateNow + ".txt";
+		path = "./crash/" + "EndingGame_" + dateNow + ".txt";
 
 		for (stackItem in callStack)
 		{
@@ -178,7 +209,7 @@ class Main extends Sprite
 			}
 		}
 
-		errMsg += "\nUncaught Error: " + e.error + "\nPlease report this error to the GitHub page: https://github.com/beihu235/NF-Engine-new\n\n> Crash Handler written by: sqirra-rng";
+		errMsg += "\nUncaught Error: " + e.error + "\nPlease Report this error on Our YouTube Channel in Community Tab\n\n> Youtube Channel: 'ThonnyDev'";
 
 		if (!FileSystem.exists("./crash/"))
 			FileSystem.createDirectory("./crash/");
@@ -188,11 +219,10 @@ class Main extends Sprite
 		Sys.println(errMsg);
 		Sys.println("Crash dump saved in " + Path.normalize(path));
 
-		Application.current.window.alert(errMsg, "Error!");
-		#if desktop
-		DiscordClient.shutdown();
-		#end
 		Sys.exit(1);
+
+		Application.current.window.alert(errMsg, "Error!");
+		DiscordClient.shutdown();
 	}
 	#end
 }

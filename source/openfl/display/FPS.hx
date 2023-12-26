@@ -5,6 +5,7 @@ import haxe.Timer;
 import openfl.events.Event;
 import openfl.text.TextField;
 import openfl.text.TextFormat;
+import flixel.input.FlxKeyManager;
 #if gl_stats
 import openfl.display._internal.stats.Context3DStats;
 import openfl.display._internal.stats.DrawCallContext;
@@ -36,7 +37,7 @@ class FPS extends TextField
 	@:noCompletion private var currentTime:Float;
 	@:noCompletion private var times:Array<Float>;
 
-	public function new(x:Float = 10, y:Float = 10, color:Int = 0x000000)
+	public function new(x:Float = 10, y:Float = 10, ?color:Int = 0x000000)
 	{
 		super();
 
@@ -71,6 +72,21 @@ class FPS extends TextField
 		currentTime += deltaTime;
 		times.push(currentTime);
 
+		var keyMode:Int = FlxG.keys.firstJustPressed();
+
+		var state:String = FlxG.state.toString();
+
+		if (keyMode != -1 && PlayState.statusGame == false) {
+			FlxG.sound.play(Paths.sound('key'), 0.3);
+		}
+
+		if (PlayState.stageUI == "pixel") {
+			defaultTextFormat = new TextFormat("pixel.otf", 8);
+		}
+		if (PlayState.stageUI != "pixel") {
+			defaultTextFormat = new TextFormat("", 14);
+		}
+
 		while (times[0] < currentTime - 1000)
 		{
 			times.shift();
@@ -82,7 +98,8 @@ class FPS extends TextField
 
 		if (currentCount != cacheCount /*&& visible*/)
 		{
-			text = currentFPS + "Fps";
+
+			text = "[" + currentFPS + "] Fps";
 			/*var memoryMegas:Float = 0;
 			
 			#if openfl
