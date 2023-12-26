@@ -406,7 +406,7 @@ class PlayState extends MusicBeatState
 		Paths.clearUnusedMemory();
 
 		startCallback = startCountdown;
-		endCallback = startAchievement;
+		endCallback = startAchievement();
 
 		// for lua
 		instance = this;
