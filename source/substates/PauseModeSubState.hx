@@ -270,7 +270,7 @@ class PauseModeSubState extends MusicBeatSubstate
                                         item.alpha = 1;
                                         item.screenCenter(X);
 
-                                        overlaySelected.setGraphicSize(item.width + 25, item.height + 25);
+                                        //overlaySelected.setGraphicSize(item.width + 25, item.height + 25);
                                         overlaySelected.y = item.y + 3;
                                         overlaySelected.screenCenter(X);
                                     }

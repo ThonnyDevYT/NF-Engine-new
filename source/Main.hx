@@ -222,7 +222,9 @@ class Main extends Sprite
 		Sys.exit(1);
 
 		Application.current.window.alert(errMsg, "Error!");
+		#if desktop
 		DiscordClient.shutdown();
+		#end
 	}
 	#end
 }

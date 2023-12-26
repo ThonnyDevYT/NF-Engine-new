@@ -752,7 +752,7 @@ class PlayState extends MusicBeatState
 			healthp.screenCenter(Y);
 			healthp.scrollFactor.set();
 			healthp.visible = !ClientPrefs.data.hideHud;
-			healthBar.setGraphicSize(healthp.width, FlxG.height - FlxG.height / 4);
+			//healthBar.setGraphicSize(healthp.width, FlxG.height - FlxG.height / 4);
 			healthp.alpha = 0;
 			healthp.angle = 90;
 		}
@@ -3152,7 +3152,7 @@ class PlayState extends MusicBeatState
 	#if ACHIEVEMENTS_ALLOWED
 	var achievementObj:AchievementPopup = null;
 	var notifi:Notification = null;
-	function startAchievement() {
+	public function startAchievement() {
 			
 			if (status1 == true && SONG.mision1) failNoti += '\n>Extraño? no completaste la cancion?';
 			if (status2 == true && SONG.mision2) failNoti += '\n>Fallaste las flechas especiales';
