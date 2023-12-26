@@ -17,7 +17,7 @@ class Notification extends FlxSpriteGroup {
 	var notiName:FlxText;
 	var notiText:FlxText;
 
-	public function new(Title:String, description:String, ?type:Int, ?camera:FlxCamera, ?Duration:Float, ?aumentwidth:Float = 0, ?aumentheight:Float = 0)
+	public function new(Title:String, description:String, ?type:Int, ?camera:FlxCamera, ?Duration:Float, ?aumentwidth:Int = 0, ?aumentheight:Int = 0)
 	{
 		super(x, y);
 		finishMode = false;

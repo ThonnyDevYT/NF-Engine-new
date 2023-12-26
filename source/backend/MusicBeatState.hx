@@ -185,9 +185,25 @@ class MusicBeatState extends FlxUIState
 	}
 
 	public static function updatestate(state:String, ?language:String) {
+		#if desktop
 		if (ClientPrefs.data.updateState) Lib.application.window.title = "Friday Night Funkin': Ending Corruption V" + MainMenuState.endingcorruptionVersion;
 		
 		if (!ClientPrefs.data.updateState) Lib.application.window.title = "Friday Night Funkin': Ending Corruption [V" + states.MainMenuState.endingcorruptionVersion + "] - [" + ClientPrefs.data.language + "] - [" + state + "] - [Ending Engine V" + states.MainMenuState.engineVersion +"]";
+		#end
+		#if !desktop
+		trace('You Not Used Windows or PC');
+		#end
+	}
+
+	public static function nullswitchState(nextState:FlxState = null) {
+		if(nextState == null) nextState = FlxG.state;
+		if(nextState == FlxG.state)
+		{
+			resetState();
+			return;
+		}
+
+		FlxG.switchState(nextState);
 	}
 
 	public static function notiWindows(?message:String, ?title:String) {
