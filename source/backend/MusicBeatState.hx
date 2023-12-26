@@ -184,6 +184,16 @@ class MusicBeatState extends FlxUIState
 		}
 	}
 
+	public static function updatestate(state:String, ?language:String) {
+		if (ClientPrefs.data.updateState) Lib.application.window.title = "Friday Night Funkin': Ending Corruption V" + MainMenuState.endingcorruptionVersion;
+		
+		if (!ClientPrefs.data.updateState) Lib.application.window.title = "Friday Night Funkin': Ending Corruption [V" + states.MainMenuState.endingcorruptionVersion + "] - [" + ClientPrefs.data.language + "] - [" + state + "] - [Ending Engine V" + states.MainMenuState.engineVersion +"]";
+	}
+
+	public static function notiWindows(?message:String, ?title:String) {
+		Lib.application.window.alert(message, title);
+	}
+
 	private function rollbackSection():Void
 	{
 		if(curStep < 0) return;

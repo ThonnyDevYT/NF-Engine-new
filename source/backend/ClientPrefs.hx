@@ -151,6 +151,7 @@ class SaveVariables {
 	public var updateSettings:Bool = false;
 
 	//Others
+	public var coins:Int = 0;
 
 	//Cuidado con esta opcion cambia el juego sin ningun tipo de problema de rendimiento!!
 	//public var ultraMode:Bool = false; ESTA OPCION FUE ELIINADA EN LA V2.0
