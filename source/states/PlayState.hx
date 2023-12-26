@@ -3149,7 +3149,7 @@ class PlayState extends MusicBeatState
 		return true;
 	}
 
-	var achievementObj:AchievementPopup = null;
+	//var achievementObj:AchievementPopup = null;
 	var notifi:Notification = null;
 	public function startAchievement() {
 			
