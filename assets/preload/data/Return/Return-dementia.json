@@ -2437,6 +2437,7 @@
 		"stage": "philly",
 		"needsVoices": false,
 		"bpm": 165,
-		"speed": 2.7
+		"speed": 2.7,
+		"BGFreeplay": "philly"
 	}
 }

@@ -1,0 +1,23 @@
+{
+	"songs": [
+		["Salvation Faith", "spooky", [146, 113, 253]],
+		["Tried Dark", "spooky", [146, 113, 253]],
+		["Together forever", "spooky", [146, 113, 253]]	
+	],
+
+	"weekCharacters": [
+		"spooky",
+		"bf",
+		"gf"
+	],
+	"weekBackground": "house",
+
+	"storyName": "< VS SPOOKYS >",
+	"weekBefore": "day 3",
+	"weekName": "week3",
+	"startUnlocked": true,
+
+	"hideStoryMode": false,
+	"hideFreeplay": false,
+	"bG": "house"
+}

@@ -1,0 +1,53 @@
+[SPANISH/ESPAÑOL]
+La misiones se establecen en cada cancion bueno estas misiones te otorgan puntos
+que podras utilizar en futuras cosas. Estos puntos no se restablecen al instalar otra version
+
+para añadir una mision deben entrar a la cancion y escoger que mision deseas habilitar
+
+Actualmente solo existen 5 misiones seleccionables:
+
+"mision1": Esta Mision es para que complete la cancion
+"mision2": Esta Mision es para que presione las flechas especiales(al falla 1 automaticamente falla la mision)
+"mision3": Esta Mision es que tiene que evitar fallar mas de 5 flechas
+"mision4": Esta mision es tener una clasificacion superior a 50%
+"mision5": Esta mision es que tiene que mantener su vida debajo del 25% al finalizar la cancion
+
+Estas son todas las misiones Disponibles en la version 2.0. pronto se añadiran mas
+
+el puntaje añade cada mision es aleatorio pero tiene mas puntaje las misiones dificiles
+
+el modificar para que solo ejecute algunas misiones solo va a hacer que te de puntos de esa mision
+
+pero la Mision 1 si ya completaste la cancion 1 vez ya no te dara mas puntos
+
+este sistema esta en Beta y los puntos todavia no hacen mucho pero se añadiran varias funciones en un futuro
+
+Gracias por leer y Disfruta de la V2.0 de Ending Corruption
+
+[INGLISH/INGLES]:
+The missions are established in each good song, these missions give you points
+that you can use in future things. These points are not reset when installing another version
+
+To add a mission you must enter the song and choose which mission you want to enable
+
+Currently there are only 5 selectable missions:
+
+"mision1": This Mission is for you to complete the song
+"mision2": This Mission is for you to press the special arrows (if you fail 1 the mission automatically fails)
+"mision3": This Mission is that you have to avoid missing more than 5 arrows
+"mision4": This mission is to have a ranking above 50%
+"mision5": This mission is that you have to keep your life below 25% at the end of the song
+
+These are all the missions available in version 2.0. more will be added soon
+
+The score added to each mission is random but difficult missions have more points.
+
+Modifying it so that it only executes some missions will only give you points from that mission
+
+but Mission 1, if you have already completed the song 1 time, will no longer give you more points.
+
+This system is in Beta and points don't do much yet but several functions will be added in the future
+
+Thanks for reading and Enjoy V2.0 of Ending Corruption
+
+By ThonnyDev - TGames | CamelyGamer

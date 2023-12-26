@@ -1,0 +1,21 @@
+{
+	"songs": [
+		["Beckoning", "pico", [146, 113, 253]]
+	],
+
+	"weekCharacters": [
+		"pico",
+		"bf",
+		"gf"
+	],
+	"weekBackground": "philly_dark",
+
+	"storyName": "< VS PICO DARK >",
+	"weekBefore": "day 4",
+	"weekName": "week5",
+	"startUnlocked": false,
+
+	"hideStoryMode": false,
+	"hideFreeplay": false,
+	"bG": "philly_dark"
+}

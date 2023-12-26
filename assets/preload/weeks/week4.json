@@ -1,0 +1,24 @@
+{
+	"songs": [
+		["Corrupted past", "sempai", [146, 113, 253]],
+		["Misguided concern", "sempai", [146, 113, 253]],
+		["Lethal code", "sempai", [146, 113, 253]],
+		["Forgetful formatting", "sempai", [146, 113, 253]]	
+	],
+
+	"weekCharacters": [
+		"sempai",
+		"bf",
+		"gf"
+	],
+	"weekBackground": "school",
+
+	"storyName": "< VS SEMPAI >",
+	"weekBefore": "day 4",
+	"weekName": "week4",
+	"startUnlocked": true,
+
+	"hideStoryMode": false,
+	"hideFreeplay": false,
+	"bG": "school"
+}

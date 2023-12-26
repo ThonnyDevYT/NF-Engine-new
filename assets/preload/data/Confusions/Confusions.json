@@ -5389,6 +5389,7 @@
 		"sections": 0,
 		"needsVoices": false,
 		"gf": "gfc",
-		"bpm": 150
+		"bpm": 150,
+		"BGFreeplay": "philly"
 	}
 }
