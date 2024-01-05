@@ -4,6 +4,7 @@ package backend;
 import android.Tools;
 import android.Permissions;
 import android.PermissionsList;
+import android.DeviceLanguage;
 #end
 
 import lime.app.Application;
