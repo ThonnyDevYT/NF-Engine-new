@@ -4,7 +4,7 @@ package backend;
 import android.Tools;
 import android.Permissions;
 import android.PermissionsList;
-import android.DeviceLanguage;
+//import android.DeviceLanguage;
 #end
 
 import lime.app.Application;
@@ -16,7 +16,7 @@ import haxe.CallStack;
 import haxe.io.Path;
 import sys.FileSystem;
 import sys.io.File;
-import flash.system.System;
+//import flash.system.System;
 
 /**
  * ...
@@ -58,33 +58,33 @@ class SUtil
 			if (!FileSystem.exists(SUtil.getPath() + 'assets') && !FileSystem.exists(SUtil.getPath() + 'mods'))
 			{
 				SUtil.applicationAlert('Uncaught Error :(!', "Whoops, seems you didn't extract the files to the .PsychEngine!\nPlease watch the tutorial by pressing OK.");
-                if (DeviceLanguage.getLang() == 'zh') CoolUtil.browserLoad('https://b23.tv/KqRRT8N');
+                if (ClientPrefs.data.language == 'Mandarin') CoolUtil.browserLoad('https://b23.tv/KqRRT8N');
 		        else CoolUtil.browserLoad('https://youtu.be/AmoNoYjJgHs?si=LvgXbRRn7eJlwL0w');				
-				System.exit(0);
+				openfl.system.System.exit(1);
 			}
 			else
 			{
 				if (!FileSystem.exists(SUtil.getPath() + 'assets'))
 				{
 					SUtil.applicationAlert('Uncaught Error :(!', "Whoops, seems you didn't extract the assets folder to the .PsychEngine!\nPlease watch the tutorial by pressing OK.");
-					if (DeviceLanguage.getLang() == 'zh') CoolUtil.browserLoad('https://b23.tv/KqRRT8N');
+					if (ClientPrefs.data.language == 'Mandarin') CoolUtil.browserLoad('https://b23.tv/KqRRT8N');
 		            else CoolUtil.browserLoad('https://youtu.be/AmoNoYjJgHs?si=LvgXbRRn7eJlwL0w');
-					System.exit(0);
+					openfl.system.System.exit(1);
 				}
 
 				if (!FileSystem.exists(SUtil.getPath() + 'mods'))
 				{
 					SUtil.applicationAlert('Uncaught Error :(!', "Whoops, seems you didn't extract the mods folder to the .PsychEngine!\nPlease watch the tutorial by pressing OK.");
-					if (DeviceLanguage.getLang() == 'zh') CoolUtil.browserLoad('https://b23.tv/KqRRT8N');
+					if (ClientPrefs.data.language == 'Mandarin') CoolUtil.browserLoad('https://b23.tv/KqRRT8N');
 		            else CoolUtil.browserLoad('https://youtu.be/AmoNoYjJgHs?si=LvgXbRRn7eJlwL0w');
-					System.exit(0);
+					openfl.system.System.exit(1);
 				}
 				
 				if (!FileSystem.exists(SUtil.getPath() + 'assets/shared/images/noteSkins') && !FileSystem.exists(SUtil.getPath() + 'assets/shared/images/noteSplashes') && Mods.mergeAllTextsNamed('images/noteSplashes/list.txt', 'shared').length == 0 && Mods.mergeAllTextsNamed('images/noteSkins/list.txt', 'shared').length == 0)//make sure people use 0.71h assets not old shits
 				{
 				
 				    var lang:String = '';
-		            if (DeviceLanguage.getLang() == 'zh') 
+					if (ClientPrefs.data.language == 'Mandarin') 
 		            lang = '未检测到noteskin和noteSplashes文件夹\n设置里将不显示这两个选项';
 		            else
 		            lang = 'noteskin and noteSplashes folders not detected, these options will not appear in Settings.';
@@ -141,7 +141,7 @@ class SUtil
 		Sys.println("Making a simple alert ...");
 
 		SUtil.applicationAlert("Uncaught Error :(!", errMsg);
-		System.exit(0);
+		openfl.system.System.exit(1);
 	}
 
 	private static function applicationAlert(title:String, description:String)
